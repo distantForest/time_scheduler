@@ -1,2 +1,2 @@
 # time_scheduler
-Constraction of time scheduler component for FPGA
+Construction of time scheduler component for FPGA
