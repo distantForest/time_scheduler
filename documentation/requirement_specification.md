@@ -24,12 +24,19 @@ The component is intended for integration into Nios® II-based systems via Quart
 
 ## DESIGN REQUIREMENTS
 
-![](media/functional_diagram.png)
-Figur 1. Funktionsdiagram för tidsstyrd schemaläggare.
+|![](media/functional_diagram.png)|
+|:---:|
+|*Figur 1. Funktionsdiagram för tidsstyrd schemaläggare.*|
 
 
-![](media/hw_architecture.png)
-Figur 2. Hardware architecture.
+<figure>
+  <img src="media/hw_architecture.png" alt="my alt text"/>
+  <figcaption>Figur 2. Hardware architecture.</figcaption>
+</figure>
+
+|![](media/hw_architecture.png)|
+|:---:|
+|*Figur 2. Hardware architecture.*|
 
 
 ![](media/sw_architecture.png)
