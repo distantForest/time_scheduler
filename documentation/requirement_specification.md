@@ -1,5 +1,6 @@
 # REQUIREMENT SPECIFICATION
 ## Project Overview
+
 The purpose of this project is to create a complete component that manages the execution of functions (implemented as standard C-functions) according to a predefined time schedule.
 ## FUNCTIONAL REQUIREMENTS
 ### Component Functionality
@@ -21,11 +22,20 @@ The component is intended for integration into Nios® II-based systems via Quart
 - The priority for each period
 - The time interval for each period
 
-![](media/functional_diagram.png){width="4.583333333333333in"
-height="2.53125in"}Figur 1. Funktionsdiagram för tidsstyrd
-schemaläggare.
-
 ## DESIGN REQUIREMENTS
+
+![](media/functional_diagram.png)
+Figur 1. Funktionsdiagram för tidsstyrd schemaläggare.
+
+
+![](media/hw_architecture.png)
+Figur 2. Hardware architecture.
+
+
+![](media/sw_architecture.png)
+Figur 3. Software architecture.
+
+
 
 ## VERIFICATION AND VALIDATION
 ## DOCUMENTATION
