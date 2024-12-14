@@ -21,6 +21,9 @@ The component is intended for integration into Nios® II-based systems via Quart
 - The priority for each period
 - The time interval for each period
 
+![](media/functional_diagram.png){width="4.583333333333333in"
+height="2.53125in"}Figur 1. Funktionsdiagram för tidsstyrd
+schemaläggare.
 
 ## DESIGN REQUIREMENTS
 
