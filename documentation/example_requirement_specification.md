@@ -4,7 +4,9 @@ The purpose of this project is to create a complete component that manages the e
 ## Functional Requirements
 Time scheduler functionality is designed according to functional diagram, shown on Figure 1.
 <div style="float:center" markdown="1">
+  
 ![Figur 1. Time scheduler functional diagram.](./media/functional_diagram.png)
+
 </div>
 
 ### 1. Component Functionality
