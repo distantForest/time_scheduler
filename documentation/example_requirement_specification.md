@@ -2,10 +2,16 @@
 The purpose of this project is to create a complete component that manages the execution of functions (implemented as standard C-functions) according to a predefined time schedule. The component is referred as Time Scheduler component in the project.
 
 ## Functional Requirements
-Time scheduler functionality is designed according to functional diagram, shown on Figure 1.
+Time scheduler functionality is designed according to functional diagram, shown on [Figure 1](#rec-spec-figure_1)Figure 1.
+[A link to that custom anchor](#my-custom-anchor-point)
+
+
+
 <div style="float:center" markdown="1">
   
-![Figur 1. Time scheduler functional diagram.](./media/functional_diagram.png "Time scheduler functional diagram")
+|![](./media/functional_diagram.png "Time scheduler functional diagram")|
+|---|
+|<a name="rec-spec-figure_1"></a>Figur 1. Time scheduler functional diagram.|
 
 </div>
 
@@ -14,7 +20,9 @@ Time scheduler functionality is designed according to functional diagram, shown 
 **1.1 The component shall repeatedly execute a C-function at a predetermined time interval, referred to as a period.**  
 - **Acceptance Criteria**: The C-function should execute every X milliseconds without failure.  
 - **Verification**: Unit Test  
-- **Status**: Completed  
+- **Status**: Completed
+  
+  <a name="my-custom-figure_1"></a>
 
 **1.2 Each C-function managed by the component shall be linked to a specific time period, referred to as a period function.**  
 - **Acceptance Criteria**: The system correctly maps functions to specific periods in configuration.  
@@ -86,6 +94,9 @@ Time scheduler functionality is designed according to functional diagram, shown 
 - The **Test Results** column is used to track the success or failure of tests associated with each requirement.
 
 ---
+
+<a name="my-custom-anchor-point"></a>
+
 
 ### How to Maintain the Document:
 1. **Updating Status**: As work progresses, the status of each requirement should be updated in both the main specification and RTM table.
