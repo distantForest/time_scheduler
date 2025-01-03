@@ -8,6 +8,7 @@ Time scheduler functionality is designed according to functional diagram, shown 
 <div style="float:center" markdown="1">
 
 <a name="rec-spec-figure_1"></a>
+
 |![](./media/functional_diagram.png "Time scheduler functional diagram")|
 |---|
 |*Figur 1. Time scheduler functional diagram.*|
