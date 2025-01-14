@@ -61,6 +61,7 @@ Time scheduler functionality is designed according to functional diagram, shown 
 ### 1. All component documentation should be managed in Github.
 
 **1.1 The documentation shall be formatted in markup language Markdown.**
+
 **1.2 The final report shall be created in MS Word document format docx.**
 
 
