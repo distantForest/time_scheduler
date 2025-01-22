@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-01-21
+-- Last update: 2025-01-22
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -29,12 +29,14 @@ entity period_controller is
   generic (
     counter_heght : integer := 4);      -- number of periodes
   port (
-    clk     : in  std_logic;            -- system clock
-    reset_n : in  std_logic;            -- system reset
-    p0      : out std_logic;            -- period 0 out
-    p1      : out std_logic;            -- period 1 out
-    p2      : out std_logic;            -- period 2 out
-    p3      : out std_logic);           -- period 3 out
+    clk        : in  std_logic;         -- system clock
+    reset_n    : in  std_logic;         -- system reset
+    p0_irq_ack : in  std_logic;
+    p0_irq_out : out std_logic;
+    p0         : out std_logic;         -- period 0 out
+    p1         : out std_logic;         -- period 1 out
+    p2         : out std_logic;         -- period 2 out
+    p3         : out std_logic);        -- period 3 out
 end entity period_controller;
 architecture count_ticks_rtl of period_controller is
 
@@ -50,9 +52,10 @@ architecture count_ticks_rtl of period_controller is
       timer_data    : out std_logic_vector(31 downto 0));
   end component tick_function;
 
-  signal counter_p0                      : integer := 0;
+  signal counter_p0                      : integer   := 0;
   signal timer_data                      : std_logic_vector(31 downto 0);
   signal tick, tick_front, tick_ack, p0b : std_logic;
+  signal p0_counter_irq, p0_irq          : std_logic := '0';  -- IRQ channel 0
 
 begin  -- architecture count_ticks
 
@@ -88,16 +91,19 @@ begin  -- architecture count_ticks
   count_ticks : process (clk, reset_n)
   begin
     if reset_n = '0' then
-      tick_ack   <= '0';
-      counter_p0 <= 0;
-      p0b        <= '1';
+      tick_ack       <= '0';
+      counter_p0     <= 0;
+      p0b            <= '1';
+      p0_counter_irq <= '0';
     elsif rising_edge(clk) then
-      tick_ack <= '0';
+      tick_ack       <= '0';
+      p0_counter_irq <= '0';
       if tick_front = '1' then
         tick_ack <= '1';
-        if counter_p0 > 8 then
-          counter_p0 <= 0;
-          p0b        <= not p0b;
+        if counter_p0 > 8 then          -- issue irq
+          counter_p0     <= 0;
+          p0b            <= not p0b;
+          p0_counter_irq <= '1';
         else
           counter_p0 <= counter_p0 + 1;
         end if;
@@ -107,6 +113,26 @@ begin  -- architecture count_ticks
     end if;
   end process count_ticks;
 
-  p0 <= p0b;
+  -- manage interrupt request
+  manage_irq : process(clk, reset_n)
+  begin
+    if reset_n = '0' then
+      p0_irq <= '0';
+    elsif rising_edge(clk) then
+      p0_irq <= p0_irq;
+      if p0_counter_irq = '1' then
+        p0_irq <= '1';
+      end if;
+      if p0_irq_ack = '1' then
+        p0_irq <= '0';
+      end if;
+
+    end if;
+
+  end process manage_irq;
+
+
+  p0         <= p0b;
+  p0_irq_out <= p0_irq;
 
 end architecture count_ticks_rtl;

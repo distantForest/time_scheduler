@@ -18,75 +18,119 @@
 -- fill out necessary details.                                                
 -- ***************************************************************************
 -- Generated on "01/21/2025 22:21:01"
-                                                            
+
 -- Vhdl Test Bench template for design  :  period_controller
 -- 
 -- Simulation tool : ModelSim (VHDL)
 -- 
 
-LIBRARY ieee;                                               
-USE ieee.std_logic_1164.all;                                
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY period_controller_vhd_tst IS
-END period_controller_vhd_tst;
-ARCHITECTURE period_controller_arch OF period_controller_vhd_tst IS
+entity period_controller_vhd_tst is
+end period_controller_vhd_tst;
+architecture period_controller_arch of period_controller_vhd_tst is
 -- constants                                                 
 -- signals                                                   
-SIGNAL clk : STD_LOGIC;
-SIGNAL p0 : STD_LOGIC;
-SIGNAL p1 : STD_LOGIC;
-SIGNAL p2 : STD_LOGIC;
-SIGNAL p3 : STD_LOGIC;
-SIGNAL reset_n : STD_LOGIC;
-COMPONENT period_controller
-	PORT (
-	clk : IN STD_LOGIC;
-	p0 : OUT STD_LOGIC;
-	p1 : OUT STD_LOGIC;
-	p2 : OUT STD_LOGIC;
-	p3 : OUT STD_LOGIC;
-	reset_n : IN STD_LOGIC
-	);
-END COMPONENT;
-BEGIN
-	i1 : period_controller
-	PORT MAP (
--- list connections between master ports and signals
-	clk => clk,
-	p0 => p0,
-	p1 => p1,
-	p2 => p2,
-	p3 => p3,
-	reset_n => reset_n
-	);
-init : PROCESS                                               
+  signal clk        : std_logic;
+  signal reset_n    : std_logic;
+  signal p0_irq_ack : std_logic;
+  signal p0_irq_out : std_logic;
+  signal p0         : std_logic;
+  signal p1         : std_logic;
+  signal p2         : std_logic;
+  signal p3         : std_logic;
+
+  signal ack_0, ack_1, ack_2 : std_logic := '0';  -- ack delay
+
+  component period_controller is
+    generic (
+      counter_heght : integer);
+    port (
+      clk        : in  std_logic;
+      reset_n    : in  std_logic;
+      p0_irq_ack : in  std_logic;
+      p0_irq_out : out std_logic;
+      p0         : out std_logic;
+      p1         : out std_logic;
+      p2         : out std_logic;
+      p3         : out std_logic);
+  end component period_controller;
+begin
+  i1 : period_controller
+    generic map (
+      counter_heght => 4)
+    port map (
+      clk        => clk,
+      reset_n    => reset_n,
+      p0_irq_ack => p0_irq_ack,
+      p0_irq_out => p0_irq_out,
+      p0         => p0,
+      p1         => p1,
+      p2         => p2,
+      p3         => p3);
+
+  init : process
 -- variable declarations                                     
-BEGIN                                                        
-        -- code that executes only once
-        --
-  reset_n <= '0';
-  wait for 122 ns;
-  reset_n <= '1';
-  
-WAIT;                                                       
-END PROCESS init;                                           
-always : PROCESS                                              
+  begin
+    -- code that executes only once
+    --
+    reset_n <= '0';
+    --p0_irq_ack <= '0';
+    wait for 122 ns;
+    reset_n <= '1';
+
+    wait;
+  end process init;
+  always : process
 -- optional sensitivity list                                  
 -- (        )                                                 
 -- variable declarations                                      
-BEGIN                                                         
-        -- code executes for every event on sensitivity list  
-WAIT;                                                        
-END PROCESS always;
+  begin
+    -- code executes for every event on sensitivity list  
+    wait;
+  end process always;
 
-clock : process
+  clock : process
 -- system clock
-begin
+  begin
     clk <= '0';
     wait for 20 ns;
-    clk <= '1' ;
+    clk <= '1';
     wait for 20 ns;
-end process clock;
+  end process clock;
 
+-- irq management
+  irq_management : process(reset_n, clk)
+  begin
+    if reset_n = '0' then
+      p0_irq_ack <= '0';
+      ack_0      <= '0';
+      ack_1      <= '0';
+      ack_2      <= '0';
+    elsif rising_edge(clk) then
+      if p0_irq_out = '1' then
+        p0_irq_ack <= '0';
+        if p0_irq_ack = '0' then
+          if ack_0 = '1' then
+            if ack_1 = '1' then
+              if ack_2 = '1' then
+                ack_0      <= '0';
+                ack_1      <= '0';
+                ack_2      <= '0';
+                p0_irq_ack <= '1';
+              else
+                ack_2 <= '1';
+              end if;
+            else
+              ack_1 <= '1';
+            end if;
+          else
+            ack_0 <= '1';
+          end if;
+        end if;
+      end if;
+    end if;
+  end process irq_management;
 
-END period_controller_arch;
+end period_controller_arch;
