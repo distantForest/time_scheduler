@@ -1,0 +1,635 @@
+Archive member included to satisfy reference by file (symbol)
+
+../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+                              obj/default/hello_world_small.o (alt_ic_isr_register)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o) (alt_iic_isr_register)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o) (alt_irq_entry)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o) (alt_irq_handler)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o) (alt_irq_active)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+                              ../period_counter_test_system_bsp//obj/HAL/src/crt0.o (alt_load)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+                              ../period_counter_test_system_bsp//obj/HAL/src/crt0.o (alt_main)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+                              obj/default/hello_world_small.o (alt_printf)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o) (alt_putchar)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+                              obj/default/hello_world_small.o (alt_putstr)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o) (alt_irq_init)
+../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o) (altera_avalon_jtag_uart_write)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o) (alt_dcache_flush_all)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o) (alt_exception)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o) (alt_icache_flush_all)
+../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o) (alt_instruction_exception_entry)
+../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o) (altera_nios2_gen2_irq_init)
+/home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                              ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o) (strlen)
+
+Allocating common symbols
+Common symbol       size              file
+
+alt_irq             0x100             ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+reset            0x0000000000001000 0x0000000000000020
+onchip_memory2_0 0x0000000000001020 0x0000000000000fe0
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+LOAD obj/default/hello_world_small.o
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libstdc++.a
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libm.a
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/mno-hw-mul/libgcc.a
+START GROUP
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/mno-hw-mul/libgcc.a
+LOAD ../period_counter_test_system_bsp//libhal_bsp.a
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libm.a
+END GROUP
+LOAD /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/mno-hw-mul/libgcc.a
+                0x0000000000001000                __alt_mem_onchip_memory2_0 = 0x1000
+
+.entry          0x0000000000001000       0x20
+ *(.entry)
+ .entry         0x0000000000001000       0x20 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+                0x0000000000001000                __reset
+                0x000000000000100c                _exit
+
+.exceptions     0x0000000000001020      0x160
+                0x0000000000001020                PROVIDE (__ram_exceptions_start, ABSOLUTE (.))
+                0x0000000000001020                . = ALIGN (0x20)
+ *(.irq)
+ *(.exceptions.entry.label)
+ .exceptions.entry.label
+                0x0000000000001020        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+                0x0000000000001020                alt_irq_entry
+ .exceptions.entry.label
+                0x0000000000001020        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+                0x0000000000001020                alt_exception
+ *(.exceptions.entry.user)
+ *(.exceptions.entry.ecc_fatal)
+ *(.exceptions.entry)
+ .exceptions.entry
+                0x0000000000001020       0x54 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.irqtest.user)
+ *(.exceptions.irqtest)
+ .exceptions.irqtest
+                0x0000000000001074       0x10 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.irqhandler.user)
+ *(.exceptions.irqhandler)
+ .exceptions.irqhandler
+                0x0000000000001084        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.irqreturn.user)
+ *(.exceptions.irqreturn)
+ .exceptions.irqreturn
+                0x0000000000001088        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.notirq.label)
+ .exceptions.notirq.label
+                0x000000000000108c        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ *(.exceptions.notirq.user)
+ *(.exceptions.notirq)
+ .exceptions.notirq
+                0x000000000000108c        0x8 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.soft.user)
+ *(.exceptions.soft)
+ *(.exceptions.unknown.user)
+ *(.exceptions.unknown)
+ .exceptions.unknown
+                0x0000000000001094       0x14 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.exit.label)
+ .exceptions.exit.label
+                0x00000000000010a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .exceptions.exit.label
+                0x00000000000010a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions.exit.user)
+ *(.exceptions.exit)
+ .exceptions.exit
+                0x00000000000010a8       0x54 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ *(.exceptions)
+ .exceptions    0x00000000000010fc       0x60 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+                0x00000000000010fc                alt_irq_handler
+ .exceptions    0x000000000000115c       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+                0x000000000000115c                alt_instruction_exception_entry
+                0x0000000000001180                PROVIDE (__ram_exceptions_end, ABSOLUTE (.))
+                0x0000000000001020                PROVIDE (__flash_exceptions_start, LOADADDR (.exceptions))
+
+.text           0x0000000000001180      0x5c8
+                [!provide]                        PROVIDE (stext, ABSOLUTE (.))
+ *(.interp)
+ *(.hash)
+ *(.dynsym)
+ *(.dynstr)
+ *(.gnu.version)
+ *(.gnu.version_d)
+ *(.gnu.version_r)
+ *(.rel.init)
+ *(.rela.init)
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ *(.rel.fini)
+ *(.rela.fini)
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rel.ctors)
+ *(.rela.ctors)
+ *(.rel.dtors)
+ *(.rela.dtors)
+ *(.rel.got)
+ *(.rela.got)
+ *(.rel.sdata .rel.sdata.* .rel.gnu.linkonce.s.*)
+ *(.rela.sdata .rela.sdata.* .rela.gnu.linkonce.s.*)
+ *(.rel.sbss .rel.sbss.* .rel.gnu.linkonce.sb.*)
+ *(.rela.sbss .rela.sbss.* .rela.gnu.linkonce.sb.*)
+ *(.rel.sdata2 .rel.sdata2.* .rel.gnu.linkonce.s2.*)
+ *(.rela.sdata2 .rela.sdata2.* .rela.gnu.linkonce.s2.*)
+ *(.rel.sbss2 .rel.sbss2.* .rel.gnu.linkonce.sb2.*)
+ *(.rela.sbss2 .rela.sbss2.* .rela.gnu.linkonce.sb2.*)
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+ *(.rel.plt)
+ *(.rela.plt)
+ *(.rel.dyn)
+ *(.init)
+ *(.plt)
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x0000000000001180       0x3c ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+                0x0000000000001180                _start
+ .text          0x00000000000011bc       0x28 obj/default/hello_world_small.o
+                0x00000000000011bc                alt_isr_period_0
+ .text.startup  0x00000000000011e4       0x7c obj/default/hello_world_small.o
+                0x00000000000011e4                main
+ .text          0x0000000000001260       0x8c ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+                0x0000000000001260                alt_ic_isr_register
+                0x0000000000001264                alt_ic_irq_enable
+                0x000000000000129c                alt_ic_irq_disable
+                0x00000000000012d4                alt_ic_irq_enabled
+ .text          0x00000000000012ec       0x68 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+                0x00000000000012ec                alt_iic_isr_register
+ .text          0x0000000000001354        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .text          0x0000000000001354        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .text          0x0000000000001354        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .text          0x0000000000001354       0xe0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+                0x0000000000001354                alt_load
+ .text          0x0000000000001434       0x2c ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+                0x0000000000001434                alt_main
+ .text          0x0000000000001460      0x170 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+                0x0000000000001460                alt_printf
+ .text          0x00000000000015d0       0x48 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+                0x00000000000015d0                alt_putchar
+ .text          0x0000000000001618       0x38 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+                0x0000000000001618                alt_putstr
+ .text          0x0000000000001650       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+                0x0000000000001650                alt_irq_init
+                0x0000000000001670                alt_sys_init
+ .text          0x0000000000001674       0x34 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                0x0000000000001674                altera_avalon_jtag_uart_write
+ .text          0x00000000000016a8        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+                0x00000000000016a8                alt_dcache_flush_all
+ .text          0x00000000000016ac        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .text          0x00000000000016ac        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+                0x00000000000016ac                alt_icache_flush_all
+ .text          0x00000000000016b0       0x74 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+                0x00000000000016b0                alt_exception_cause_generated_bad_addr
+ .text          0x0000000000001724        0x8 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+                0x0000000000001724                altera_nios2_gen2_irq_init
+ .text          0x000000000000172c        0x0 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ .text.strlen   0x000000000000172c       0x1c /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                0x000000000000172c                strlen
+ *(.gnu.warning.*)
+ *(.fini)
+                [!provide]                        PROVIDE (__etext, ABSOLUTE (.))
+                [!provide]                        PROVIDE (_etext, ABSOLUTE (.))
+                [!provide]                        PROVIDE (etext, ABSOLUTE (.))
+ *(.eh_frame_hdr)
+                0x0000000000001748                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (__preinit_array_start, ABSOLUTE (.))
+ *(.preinit_array)
+                [!provide]                        PROVIDE (__preinit_array_end, ABSOLUTE (.))
+                [!provide]                        PROVIDE (__init_array_start, ABSOLUTE (.))
+ *(.init_array)
+                [!provide]                        PROVIDE (__init_array_end, ABSOLUTE (.))
+                [!provide]                        PROVIDE (__fini_array_start, ABSOLUTE (.))
+ *(.fini_array)
+                [!provide]                        PROVIDE (__fini_array_end, ABSOLUTE (.))
+ *(.eh_frame)
+ *(.gcc_except_table .gcc_except_table.*)
+ *(.dynamic)
+                [!provide]                        PROVIDE (__CTOR_LIST__, ABSOLUTE (.))
+ *(.ctors)
+ *(SORT(.ctors.*))
+                [!provide]                        PROVIDE (__CTOR_END__, ABSOLUTE (.))
+                [!provide]                        PROVIDE (__DTOR_LIST__, ABSOLUTE (.))
+ *(.dtors)
+ *(SORT(.dtors.*))
+                [!provide]                        PROVIDE (__DTOR_END__, ABSOLUTE (.))
+ *(.jcr)
+                0x0000000000001748                . = ALIGN (0x4)
+
+.rodata         0x0000000000001748       0x60
+                0x0000000000001748                PROVIDE (__ram_rodata_start, ABSOLUTE (.))
+                0x0000000000001748                . = ALIGN (0x4)
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata.str1.4
+                0x0000000000001748       0x60 obj/default/hello_world_small.o
+                                         0x5d (size before relaxing)
+ *(.rodata1)
+                0x00000000000017a8                . = ALIGN (0x4)
+                0x00000000000017a8                PROVIDE (__ram_rodata_end, ABSOLUTE (.))
+                0x0000000000001748                PROVIDE (__flash_rodata_start, LOADADDR (.rodata))
+
+.rwdata         0x00000000000017a8        0x4 load address 0x00000000000017ac
+                0x00000000000017a8                PROVIDE (__ram_rwdata_start, ABSOLUTE (.))
+                0x00000000000017a8                . = ALIGN (0x4)
+ *(.got.plt)
+ *(.got)
+ *(.data1)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .data          0x00000000000017a8        0x0 obj/default/hello_world_small.o
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .data          0x00000000000017a8        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .data          0x00000000000017a8        0x0 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                0x00000000000097a8                _gp = ABSOLUTE ((. + 0x8000))
+                [!provide]                        PROVIDE (gp, _gp)
+ *(.rwdata .rwdata.*)
+ *(.sdata .sdata.* .gnu.linkonce.s.*)
+ .sdata         0x00000000000017a8        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+                0x00000000000017a8                alt_priority_mask
+ *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+                0x00000000000017ac                . = ALIGN (0x4)
+                0x00000000000017ac                _edata = ABSOLUTE (.)
+                [!provide]                        PROVIDE (edata, ABSOLUTE (.))
+                0x00000000000017ac                PROVIDE (__ram_rwdata_end, ABSOLUTE (.))
+                0x00000000000017ac                PROVIDE (__flash_rwdata_start, LOADADDR (.rwdata))
+
+.bss            0x00000000000017b0      0x120
+                0x00000000000017b0                __bss_start = ABSOLUTE (.)
+                [!provide]                        PROVIDE (__sbss_start, ABSOLUTE (.))
+                [!provide]                        PROVIDE (___sbss_start, ABSOLUTE (.))
+ *(.dynsbss)
+ *(.sbss .sbss.* .gnu.linkonce.sb.*)
+ .sbss          0x00000000000017b0        0x8 obj/default/hello_world_small.o
+                0x00000000000017b4                period_0_data
+ .sbss          0x00000000000017b8        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+                0x00000000000017b8                alt_irq_active
+ .sbss          0x00000000000017bc        0xc ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+                0x00000000000017bc                alt_envp
+                0x00000000000017c0                alt_argv
+                0x00000000000017c4                alt_argc
+ .sbss          0x00000000000017c8        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+                0x00000000000017c8                jtag_uart_0
+ .sbss          0x00000000000017cc        0x4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+                0x00000000000017cc                alt_instruction_exception_handler
+ *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+ *(.scommon)
+                [!provide]                        PROVIDE (__sbss_end, ABSOLUTE (.))
+                [!provide]                        PROVIDE (___sbss_end, ABSOLUTE (.))
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .bss           0x00000000000017d0        0x0 obj/default/hello_world_small.o
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .bss           0x00000000000017d0        0x0 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .bss           0x00000000000017d0        0x0 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+ *(COMMON)
+ COMMON         0x00000000000017d0      0x100 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+                0x00000000000017d0                alt_irq
+                0x00000000000018d0                . = ALIGN (0x4)
+                0x00000000000018d0                __bss_end = ABSOLUTE (.)
+
+.onchip_memory2_0
+                0x00000000000018d0        0x0
+                [!provide]                        PROVIDE (_alt_partition_onchip_memory2_0_start, ABSOLUTE (.))
+ *(.onchip_memory2_0 .onchip_memory2_0. onchip_memory2_0.*)
+                0x00000000000018d0                . = ALIGN (0x4)
+                [!provide]                        PROVIDE (_alt_partition_onchip_memory2_0_end, ABSOLUTE (.))
+                0x00000000000018d0                _end = ABSOLUTE (.)
+                0x00000000000018d0                end = ABSOLUTE (.)
+                0x00000000000018d0                __alt_stack_base = ABSOLUTE (.)
+                [!provide]                        PROVIDE (_alt_partition_onchip_memory2_0_load_addr, LOADADDR (.onchip_memory2_0))
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x0000000000000000       0x23
+ *(.comment)
+ .comment       0x0000000000000000       0x23 obj/default/hello_world_small.o
+                                         0x24 (size before relaxing)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .comment       0x0000000000000023       0x24 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .comment       0x0000000000000023       0x24 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000      0x2b8
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x28 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .debug_aranges
+                0x0000000000000028       0x28 obj/default/hello_world_small.o
+ .debug_aranges
+                0x0000000000000050       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .debug_aranges
+                0x0000000000000070       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_aranges
+                0x0000000000000090       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .debug_aranges
+                0x00000000000000c0       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_aranges
+                0x00000000000000e0       0x18 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .debug_aranges
+                0x00000000000000f8       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .debug_aranges
+                0x0000000000000118       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .debug_aranges
+                0x0000000000000138       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_aranges
+                0x0000000000000158       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .debug_aranges
+                0x0000000000000178       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .debug_aranges
+                0x0000000000000198       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_aranges
+                0x00000000000001b8       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_aranges
+                0x00000000000001d8       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_aranges
+                0x00000000000001f8       0x38 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .debug_aranges
+                0x0000000000000230       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_aranges
+                0x0000000000000250       0x28 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_aranges
+                0x0000000000000278       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_aranges
+                0x0000000000000298       0x20 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x0000000000000000     0x19f8
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000       0xa2 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .debug_info    0x00000000000000a2      0x1b7 obj/default/hello_world_small.o
+ .debug_info    0x0000000000000259      0x38a ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .debug_info    0x00000000000005e3      0x232 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_info    0x0000000000000815       0xab ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .debug_info    0x00000000000008c0      0x184 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_info    0x0000000000000a44       0x88 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .debug_info    0x0000000000000acc      0x1c9 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .debug_info    0x0000000000000c95      0x169 ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .debug_info    0x0000000000000dfe      0x14d ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_info    0x0000000000000f4b      0x12a ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .debug_info    0x0000000000001075      0x13a ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .debug_info    0x00000000000011af      0x185 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_info    0x0000000000001334      0x197 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_info    0x00000000000014cb       0x92 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_info    0x000000000000155d       0xb1 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .debug_info    0x000000000000160e       0x92 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_info    0x00000000000016a0      0x1fd ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_info    0x000000000000189d       0x92 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_info    0x000000000000192f       0xc9 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug_abbrev   0x0000000000000000      0xe1b
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000       0x12 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .debug_abbrev  0x0000000000000012      0x101 obj/default/hello_world_small.o
+ .debug_abbrev  0x0000000000000113      0x1a0 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .debug_abbrev  0x00000000000002b3      0x19c ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_abbrev  0x000000000000044f       0x12 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .debug_abbrev  0x0000000000000461      0x120 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_abbrev  0x0000000000000581       0x40 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .debug_abbrev  0x00000000000005c1       0xd8 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .debug_abbrev  0x0000000000000699       0xee ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .debug_abbrev  0x0000000000000787       0xd5 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_abbrev  0x000000000000085c       0xd2 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .debug_abbrev  0x000000000000092e       0xd3 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .debug_abbrev  0x0000000000000a01      0x107 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_abbrev  0x0000000000000b08       0xd5 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_abbrev  0x0000000000000bdd       0x42 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_abbrev  0x0000000000000c1f       0x12 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .debug_abbrev  0x0000000000000c31       0x42 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_abbrev  0x0000000000000c73       0xe7 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_abbrev  0x0000000000000d5a       0x42 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_abbrev  0x0000000000000d9c       0x7f /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug_line     0x0000000000000000      0xdb8
+ *(.debug_line)
+ .debug_line    0x0000000000000000       0x66 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .debug_line    0x0000000000000066       0xf4 obj/default/hello_world_small.o
+ .debug_line    0x000000000000015a       0xf1 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .debug_line    0x000000000000024b       0xd6 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_line    0x0000000000000321       0x6b ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .debug_line    0x000000000000038c       0xa5 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_line    0x0000000000000431       0x50 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+ .debug_line    0x0000000000000481       0xa4 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .debug_line    0x0000000000000525       0xbd ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .debug_line    0x00000000000005e2      0x124 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_line    0x0000000000000706       0x55 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .debug_line    0x000000000000075b       0xb2 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .debug_line    0x000000000000080d      0x101 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_line    0x000000000000090e       0xf0 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_line    0x00000000000009fe       0x4e ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_line    0x0000000000000a4c       0xb3 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .debug_line    0x0000000000000aff       0x4e ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_line    0x0000000000000b4d       0xbf ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_line    0x0000000000000c0c       0x50 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_line    0x0000000000000c5c      0x15c /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug_frame    0x0000000000000000      0x308
+ *(.debug_frame)
+ .debug_frame   0x0000000000000000       0x38 obj/default/hello_world_small.o
+ .debug_frame   0x0000000000000038       0x50 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .debug_frame   0x0000000000000088       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_frame   0x00000000000000b8       0x34 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_frame   0x00000000000000ec       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .debug_frame   0x000000000000011c       0x2c ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+ .debug_frame   0x0000000000000148       0x54 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_frame   0x000000000000019c       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .debug_frame   0x00000000000001cc       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .debug_frame   0x00000000000001fc       0x3c ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_frame   0x0000000000000238       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_frame   0x0000000000000258       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+ .debug_frame   0x0000000000000278       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+ .debug_frame   0x0000000000000298       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_frame   0x00000000000002c8       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+ .debug_frame   0x00000000000002e8       0x20 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug_str      0x0000000000000000      0xccf
+ *(.debug_str)
+ .debug_str     0x0000000000000000      0x188 obj/default/hello_world_small.o
+                                        0x1c6 (size before relaxing)
+ .debug_str     0x0000000000000188      0x16c ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+                                        0x287 (size before relaxing)
+ .debug_str     0x00000000000002f4       0x37 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+                                        0x241 (size before relaxing)
+ .debug_str     0x000000000000032b       0x3a ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+                                        0x1cb (size before relaxing)
+ .debug_str     0x0000000000000365       0x17 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_vars.o)
+                                        0x16e (size before relaxing)
+ .debug_str     0x000000000000037c      0x113 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+                                        0x270 (size before relaxing)
+ .debug_str     0x000000000000048f       0x8f ../period_counter_test_system_bsp//libhal_bsp.a(alt_main.o)
+                                        0x1e9 (size before relaxing)
+ .debug_str     0x000000000000051e       0x59 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+                                        0x13a (size before relaxing)
+ .debug_str     0x0000000000000577       0x60 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+                                        0x1c1 (size before relaxing)
+ .debug_str     0x00000000000005d7       0x1c ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+                                        0x1c6 (size before relaxing)
+ .debug_str     0x00000000000005f3       0x86 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+                                        0x25a (size before relaxing)
+ .debug_str     0x0000000000000679       0x32 ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+                                        0x249 (size before relaxing)
+ .debug_str     0x00000000000006ab       0x1f ../period_counter_test_system_bsp//libhal_bsp.a(alt_dcache_flush_all.o)
+                                        0x189 (size before relaxing)
+ .debug_str     0x00000000000006ca       0x1f ../period_counter_test_system_bsp//libhal_bsp.a(alt_icache_flush_all.o)
+                                        0x189 (size before relaxing)
+ .debug_str     0x00000000000006e9      0x48b ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+                                        0x5d4 (size before relaxing)
+ .debug_str     0x0000000000000b74       0x20 ../period_counter_test_system_bsp//libhal_bsp.a(altera_nios2_gen2_irq.o)
+                                        0x190 (size before relaxing)
+ .debug_str     0x0000000000000b94      0x13b /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+                                        0x1e6 (size before relaxing)
+
+.debug_loc      0x0000000000000000      0x736
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000       0x51 obj/default/hello_world_small.o
+ .debug_loc     0x0000000000000051      0x170 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic.o)
+ .debug_loc     0x00000000000001c1      0x193 ../period_counter_test_system_bsp//libhal_bsp.a(alt_iic_isr_register.o)
+ .debug_loc     0x0000000000000354       0x72 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_loc     0x00000000000003c6      0x1de ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_loc     0x00000000000005a4       0x2c ../period_counter_test_system_bsp//libhal_bsp.a(alt_putchar.o)
+ .debug_loc     0x00000000000005d0       0x37 ../period_counter_test_system_bsp//libhal_bsp.a(alt_putstr.o)
+ .debug_loc     0x0000000000000607       0x21 ../period_counter_test_system_bsp//libhal_bsp.a(alt_sys_init.o)
+ .debug_loc     0x0000000000000628       0x8b ../period_counter_test_system_bsp//libhal_bsp.a(altera_avalon_jtag_uart_write.o)
+ .debug_loc     0x00000000000006b3       0x65 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_loc     0x0000000000000718       0x1e /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_alt_sim_info
+                0x0000000000000000       0x10
+ *(.debug_alt_sim_info)
+ .debug_alt_sim_info
+                0x0000000000000000       0x10 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+                0x0000000000002000                __alt_data_end = 0x2000
+                0x0000000000002000                PROVIDE (__alt_stack_pointer, __alt_data_end)
+                [!provide]                        PROVIDE (__alt_stack_limit, __alt_stack_base)
+                [!provide]                        PROVIDE (__alt_heap_start, end)
+                [!provide]                        PROVIDE (__alt_heap_limit, 0x2000)
+OUTPUT(period_counter_test_system.elf elf32-littlenios2)
+
+.debug_ranges   0x0000000000000000      0x128
+ .debug_ranges  0x0000000000000000       0x20 ../period_counter_test_system_bsp//obj/HAL/src/crt0.o
+ .debug_ranges  0x0000000000000020       0x18 obj/default/hello_world_small.o
+ .debug_ranges  0x0000000000000038       0x28 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_entry.o)
+ .debug_ranges  0x0000000000000060       0x10 ../period_counter_test_system_bsp//libhal_bsp.a(alt_irq_handler.o)
+ .debug_ranges  0x0000000000000070       0x48 ../period_counter_test_system_bsp//libhal_bsp.a(alt_load.o)
+ .debug_ranges  0x00000000000000b8       0x18 ../period_counter_test_system_bsp//libhal_bsp.a(alt_printf.o)
+ .debug_ranges  0x00000000000000d0       0x30 ../period_counter_test_system_bsp//libhal_bsp.a(alt_exception_entry.o)
+ .debug_ranges  0x0000000000000100       0x18 ../period_counter_test_system_bsp//libhal_bsp.a(alt_instruction_exception_entry.o)
+ .debug_ranges  0x0000000000000118       0x10 /home/igor/work/intelFPGA_lite/18.1/nios2eds/bin/gnu/H-x86_64-pc-linux-gnu/bin/../lib/gcc/nios2-elf/5.3.0/../../../../../H-x86_64-pc-linux-gnu/nios2-elf/lib/mno-hw-mul/libsmallc.a(lib_a-strlen.o)
