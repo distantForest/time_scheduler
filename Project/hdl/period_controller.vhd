@@ -27,11 +27,13 @@ use ieee.numeric_std.all;
 entity period_controller is
 
   generic (
-    counter_heght : integer := 4);      -- number of periodes
+    counter_heght : integer := 4; -- number of periodes
+	 tick_length : integer := 25 * 1000 * 1000; -- tick length
+	 period_0_length : integer := 4);   -- period 0   
   port (
     clk        : in  std_logic;         -- system clock
     reset_n    : in  std_logic;         -- system reset
-    p0_irq_out : out std_logic;
+    p0_irq_out : out std_logic_vector(0 downto 0);
     p0         : out std_logic;         -- period 0 out
     p1         : out std_logic;         -- period 1 out
     p2         : out std_logic;         -- period 2 out
@@ -79,7 +81,7 @@ begin  --architecture count_ticks
   -- instance "tick_function_1"
   tick_function_1 : entity work.tick_function
     generic map (
-      g_timer_limit => 7)
+      g_timer_limit => tick_length)
     port map (
       reset_timer_n => '1',
       clk           => clk,
@@ -115,7 +117,7 @@ begin  --architecture count_ticks
       p0_counter_irq <= '0';
       if tick_front = '1' then
         tick_ack <= '1';
-        if counter_p0 > 8 then          --issue irq
+        if counter_p0 > period_0_length then          --issue irq
           counter_p0     <= 0;
           p0b            <= not p0b;
           p0_counter_irq <= '1';
@@ -148,7 +150,7 @@ begin  --architecture count_ticks
 
 
   p0         <= p0b;
-  p0_irq_out <= p0_irq;
+  p0_irq_out(0) <= p0_irq;
 
   --avalon bus interface
 
