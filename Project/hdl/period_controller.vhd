@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-01-23
+-- Last update: 2025-01-30
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ entity period_controller is
   port (
     clk        : in  std_logic;         -- system clock
     reset_n    : in  std_logic;         -- system reset
-    p0_irq_out : out std_logic_vector(0 downto 0);
+    p0_irq_out : out std_logic_vector(counter_heght - 1 downto 0);
     p0         : out std_logic;         -- period 0 out
     p1         : out std_logic;         -- period 1 out
     p2         : out std_logic;         -- period 2 out
@@ -62,11 +62,17 @@ architecture count_ticks_rtl of period_controller is
       tick          : out std_logic;
       timer_data    : out std_logic_vector(31 downto 0));
   end component tick_function;
-
+type period_array is array (natural range 0  to counter_heght - 1) of natural;
+  signal period_counters : period_array;
+  signal period_length : period_array;
+  constant period_init: period_array := (
+1,4,8,16
+    );
   signal counter_p0                      : integer   := 0;
   signal timer_data                      : std_logic_vector(31 downto 0);
   signal tick, tick_front, tick_ack, p0b : std_logic;
   signal p0_counter_irq, p0_irq          : std_logic := '0';  --IRQ channel 0
+  signal p_counter_irq, p_irq, p_irq_ack : std_logic_vector(counter_heght - 1 downto 0) := (others => '0');
 
   signal p_irq_ack_reg        : std_logic_vector(31 downto 0);
   signal p_irq_enable_reg     : std_logic_vector(31 downto 0);
@@ -108,22 +114,30 @@ begin  --architecture count_ticks
   count_ticks : process (clk, reset_n)
   begin
     if reset_n = '0' then
-      tick_ack       <= '0';
-      counter_p0     <= 0;
-      p0b            <= '1';
-      p0_counter_irq <= '0';
+      tick_ack        <= '0';
+      -- counter_p0     <= 0;
+      period_counters <= (others => 0);
+      -- init period length
+      --  period_length <= period_init;
+      -- p0b           <= '1';
+      p_counter_irq <= (others => '0');
     elsif rising_edge(clk) then
+	   --period_length <= period_length;
       tick_ack       <= '0';
-      p0_counter_irq <= '0';
+      p_counter_irq <= (others => '0');
       if tick_front = '1' then
         tick_ack <= '1';
-        if counter_p0 > period_0_length then          --issue irq
-          counter_p0     <= 0;
-          p0b            <= not p0b;
-          p0_counter_irq <= '1';
-        else
-          counter_p0 <= counter_p0 + 1;
-        end if;
+        -- update counters
+        update_counters :
+        for i in period_counters'range loop
+          if period_counters(i) > period_init(i) then  --issue irq
+            period_counters(i) <= 0;
+            -- p0b            <= not p0b;
+            p_counter_irq(i)   <= '1';
+          else
+            period_counters(i) <= period_counters(i) + 1;
+          end if;
+        end loop update_counters;
       else
         tick_ack <= '0';
       end if;
@@ -134,15 +148,18 @@ begin  --architecture count_ticks
   manage_irq : process(clk, reset_n)
   begin
     if reset_n = '0' then
-      p0_irq <= '0';
+      p_irq <= (others => '0');
     elsif rising_edge(clk) then
-      p0_irq <= p0_irq;
-      if (p0_counter_irq = '1') and (p_irq_enable_reg(0) = '1') then
-        p0_irq <= '1';
-      end if;
-      if p0_irq_ack = '1' then
-        p0_irq <= '0';
-      end if;
+      p_irq <= (others => '0'); -- p_irq;
+      check_irq :
+      for i in period_counters'range loop
+        if (p_counter_irq(i) = '1') and (p_irq_enable_reg(i) = '1') then
+          p_irq(i) <= '1';
+        end if;
+        if p_irq_ack(i) = '1' then
+          p_irq(i) <= '0';
+        end if;
+      end loop check_irq;
 
     end if;
 
@@ -150,7 +167,7 @@ begin  --architecture count_ticks
 
 
   p0         <= p0b;
-  p0_irq_out(0) <= p0_irq;
+  p0_irq_out <= p_irq;
 
   --avalon bus interface
 
@@ -174,13 +191,18 @@ begin  --architecture count_ticks
   begin
     if reset_n = '0' then
       p_irq_ack_reg <= (others => '0');
+		p_irq_ack <= (others => '0');
     elsif rising_edge(clk) then
-      p0_irq_ack <= '0';
+      p_irq_ack <= (others => '0');
       if write_irq_ack_reg = '1' then
-        p_irq_ack_reg(31 downto 1) <= din(31 downto 1);
-        if (din(0) = '1') then
-          p0_irq_ack <= '1';
-        end if;
+        -- p_irq_ack_reg(31 downto 1) <= din(31 downto 1);
+        -- check_ack
+        check_ack :
+        for i in period_counters'range loop
+          if (din(i) = '1') then
+            p_irq_ack(i) <= '1';
+          end if;
+        end loop check_ack;
       end if;
     end if;
 
