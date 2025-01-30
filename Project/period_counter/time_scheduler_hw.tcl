@@ -63,15 +63,40 @@ set_parameter_property tick_length UNITS None
 set_parameter_property tick_length ALLOWED_RANGES -2147483648:2147483647
 set_parameter_property tick_length DESCRIPTION "tick puls length in system clock pulses"
 set_parameter_property tick_length HDL_PARAMETER true
-add_parameter period_0_length INTEGER 4
-set_parameter_property period_0_length DEFAULT_VALUE 4
-set_parameter_property period_0_length DISPLAY_NAME period_0_length
-set_parameter_property period_0_length TYPE INTEGER
-set_parameter_property period_0_length UNITS None
-set_parameter_property period_0_length ALLOWED_RANGES -2147483648:2147483647
-set_parameter_property period_0_length HDL_PARAMETER true
+# add_parameter period_0_length INTEGER 4
+# set_parameter_property period_0_length DEFAULT_VALUE 4
+# set_parameter_property period_0_length DISPLAY_NAME period_0_length
+# set_parameter_property period_0_length TYPE INTEGER
+# set_parameter_property period_0_length UNITS None
+# set_parameter_property period_0_length ALLOWED_RANGES -2147483648:2147483647
+# set_parameter_property period_0_length HDL_PARAMETER true
 
+for {set i 0} {$i < 16} {incr i} {
+set param_name ""
 
+append param_name "period_" $i "_length" 
+    add_parameter $param_name INTEGER [expr $i + 1] "Period length for period $i"
+
+	set_parameter_property $param_name VISIBLE false
+}
+set_module_property VALIDATION_CALLBACK  adjust_height
+
+proc adjust_height {} {
+    set per_len [get_parameter_value counter_heght]
+
+    if {$per_len > 0} {    
+	for {set i 0} {$i < 16} {incr i} {
+	    set param_name ""
+	    if {$i < $per_len} {
+		set vis true
+	    } else {
+		set vis false
+	    }
+	    append param_name "period_" $i "_length"
+	    set_parameter_property $param_name VISIBLE $vis
+      	}
+    }
+}
 # 
 # display items
 # 
