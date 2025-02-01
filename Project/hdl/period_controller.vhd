@@ -29,7 +29,24 @@ entity period_controller is
   generic (
     counter_heght : integer := 4; -- number of periodes
 	 tick_length : integer := 25 * 1000 * 1000; -- tick length
-	 period_0_length : integer := 4);   -- period 0   
+	 period_0_length : integer := 4;   -- period 0 
+	 per0 : integer := 1;
+	 per1 : integer := 2;
+	 per2 : integer := 3;
+	 per3 : integer := 4;
+	 per4 : integer := 5;
+	 per5 : integer := 6;
+	 per6 : integer := 7;
+	 per7 : integer := 8;
+	 per8 : integer := 9;
+	 per9 : integer := 10;
+	 per10 : integer := 11;
+	 per11 : integer := 12;
+	 per12 : integer := 13;
+	 per13 : integer := 14;
+	 per14 : integer := 15;
+	 per15 : integer := 16
+		);
   port (
     clk        : in  std_logic;         -- system clock
     reset_n    : in  std_logic;         -- system reset
@@ -63,10 +80,27 @@ architecture count_ticks_rtl of period_controller is
       timer_data    : out std_logic_vector(31 downto 0));
   end component tick_function;
 type period_array is array (natural range 0  to counter_heght - 1) of natural;
+type integer_array is array (natural range 0  to 15) of natural;
   signal period_counters : period_array;
   signal period_length : period_array;
-  constant period_init: period_array := (
-1,4,8,16
+  constant period_init: integer_array := ( -- fill 
+-- constants period length
+	 per0,
+	 per1,
+	 per2,
+	 per3,
+	 per4,
+	 per5,
+	 per6,
+	 per7,
+	 per8,
+	 per9,
+	 per10,
+	 per11,
+	 per12,
+	 per13,
+	 per14,
+	 per15
     );
   signal counter_p0                      : integer   := 0;
   signal timer_data                      : std_logic_vector(31 downto 0);

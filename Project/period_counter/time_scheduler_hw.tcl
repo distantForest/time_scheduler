@@ -39,7 +39,7 @@ add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL period_controller
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
-add_fileset_file period_controller.vhd VHDL PATH ../hdl/period_controller.vhd TOP_LEVEL_FILE
+add_fileset_file period_controller.vhd VHDL PATH ../hdl/period_controller_res.vhd TOP_LEVEL_FILE
 add_fileset_file tick_timer.vhd VHDL PATH ../hdl/tick_timer.vhd
 
 
@@ -52,7 +52,7 @@ set_parameter_property counter_heght DISPLAY_NAME counter_heght
 set_parameter_property counter_heght WIDTH ""
 set_parameter_property counter_heght TYPE INTEGER
 set_parameter_property counter_heght UNITS None
-set_parameter_property counter_heght ALLOWED_RANGES -2147483648:2147483647
+set_parameter_property counter_heght ALLOWED_RANGES 1:16
 set_parameter_property counter_heght DESCRIPTION ""
 set_parameter_property counter_heght HDL_PARAMETER true
 add_parameter tick_length INTEGER 25000000 "tick puls length in system clock pulses"
@@ -63,21 +63,16 @@ set_parameter_property tick_length UNITS None
 set_parameter_property tick_length ALLOWED_RANGES -2147483648:2147483647
 set_parameter_property tick_length DESCRIPTION "tick puls length in system clock pulses"
 set_parameter_property tick_length HDL_PARAMETER true
-# add_parameter period_0_length INTEGER 4
-# set_parameter_property period_0_length DEFAULT_VALUE 4
-# set_parameter_property period_0_length DISPLAY_NAME period_0_length
-# set_parameter_property period_0_length TYPE INTEGER
-# set_parameter_property period_0_length UNITS None
-# set_parameter_property period_0_length ALLOWED_RANGES -2147483648:2147483647
-# set_parameter_property period_0_length HDL_PARAMETER true
 
 for {set i 0} {$i < 16} {incr i} {
 set param_name ""
 
-append param_name "period_" $i "_length" 
+append param_name "per" $i 
     add_parameter $param_name INTEGER [expr $i + 1] "Period length for period $i"
 
-	set_parameter_property $param_name VISIBLE false
+    set_parameter_property $param_name VISIBLE false
+    set_parameter_property $param_name HDL_PARAMETER true
+    set_parameter_property $param_name DEFAULT_VALUE [expr $i + 1] 
 }
 set_module_property VALIDATION_CALLBACK  adjust_height
 
@@ -92,7 +87,7 @@ proc adjust_height {} {
 	    } else {
 		set vis false
 	    }
-	    append param_name "period_" $i "_length"
+	    append param_name "per" $i
 	    set_parameter_property $param_name VISIBLE $vis
       	}
     }
