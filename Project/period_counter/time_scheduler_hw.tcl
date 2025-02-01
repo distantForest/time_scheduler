@@ -39,7 +39,7 @@ add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL period_controller
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
-add_fileset_file period_controller.vhd VHDL PATH ../hdl/period_controller_res.vhd TOP_LEVEL_FILE
+add_fileset_file period_controller.vhd VHDL PATH ../hdl/period_controller.vhd TOP_LEVEL_FILE
 add_fileset_file tick_timer.vhd VHDL PATH ../hdl/tick_timer.vhd
 
 
