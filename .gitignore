@@ -1,5 +1,5 @@
 **/#*#
-**/*.bak
+**/*.bak*
 **/*~
 **/db
 **/*.o
@@ -7,4 +7,7 @@
 **/.qsys_edit
 **/_*
 **/*.orig
-
+msim_transcript
+**/*.opt
+**/*.wlf
+**/*.vstf
