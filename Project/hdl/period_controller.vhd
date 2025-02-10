@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-01-30
+-- Last update: 2025-02-02
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ entity period_controller is
   generic (
     counter_heght : integer := 4; -- number of periodes
 	 tick_length : integer := 25 * 1000 * 1000; -- tick length
-	 period_0_length : integer := 4;   -- period 0 
+	 -- period_0_length : integer := 4;   -- period 0 
 	 per0 : integer := 1;
 	 per1 : integer := 2;
 	 per2 : integer := 3;
@@ -51,10 +51,6 @@ entity period_controller is
     clk        : in  std_logic;         -- system clock
     reset_n    : in  std_logic;         -- system reset
     p0_irq_out : out std_logic_vector(counter_heght - 1 downto 0);
-    p0         : out std_logic;         -- period 0 out
-    p1         : out std_logic;         -- period 1 out
-    p2         : out std_logic;         -- period 2 out
-    p3         : out std_logic;         -- period 3 out
     -- avalon bus ports
     -- clk     : in  std_logic;
     cs_n       : in  std_logic;         --IP component address
@@ -114,9 +110,8 @@ type integer_array is array (natural range 0  to 15) of natural;
   signal write_irq_ack_reg    : std_logic;
   signal p0_irq_ack           : std_logic;
 
+  -- alias tick_for_sim : std_logic is tick;
 begin  --architecture count_ticks
-
-
 
   -- instance "tick_function_1"
   tick_function_1 : entity work.tick_function
@@ -146,17 +141,13 @@ begin  --architecture count_ticks
 
   -- count ticks
   count_ticks : process (clk, reset_n)
+
   begin
     if reset_n = '0' then
       tick_ack        <= '0';
-      -- counter_p0     <= 0;
       period_counters <= (others => 0);
-      -- init period length
-      --  period_length <= period_init;
-      -- p0b           <= '1';
       p_counter_irq <= (others => '0');
     elsif rising_edge(clk) then
-	   --period_length <= period_length;
       tick_ack       <= '0';
       p_counter_irq <= (others => '0');
       if tick_front = '1' then
@@ -166,7 +157,6 @@ begin  --architecture count_ticks
         for i in period_counters'range loop
           if period_counters(i) > period_init(i) then  --issue irq
             period_counters(i) <= 0;
-            -- p0b            <= not p0b;
             p_counter_irq(i)   <= '1';
           else
             period_counters(i) <= period_counters(i) + 1;
@@ -176,15 +166,16 @@ begin  --architecture count_ticks
         tick_ack <= '0';
       end if;
     end if;
+
   end process count_ticks;
 
   -- manage interrupt request
   manage_irq : process(clk, reset_n)
+
   begin
     if reset_n = '0' then
       p_irq <= (others => '0');
     elsif rising_edge(clk) then
-      p_irq <= (others => '0'); -- p_irq;
       check_irq :
       for i in period_counters'range loop
         if (p_counter_irq(i) = '1') and (p_irq_enable_reg(i) = '1') then
@@ -194,20 +185,17 @@ begin  --architecture count_ticks
           p_irq(i) <= '0';
         end if;
       end loop check_irq;
-
     end if;
 
   end process manage_irq;
 
-
-  p0         <= p0b;
   p0_irq_out <= p_irq;
 
   --avalon bus interface
-
   write_irq_enable_reg <= '1' when (cs_n = '0' and write_n = '0' and addr = "00") else
                           '0';
   irq_enable_register : process(reset_n, clk)
+
   begin
     if reset_n = '0' then
       p_irq_enable_reg <= (others => '0');
@@ -222,6 +210,7 @@ begin  --architecture count_ticks
   write_irq_ack_reg <= '1' when (cs_n = '0' and write_n = '0' and addr = "01") else
                        '0';
   irq_ack_register : process(reset_n, clk)
+
   begin
     if reset_n = '0' then
       p_irq_ack_reg <= (others => '0');
@@ -229,8 +218,6 @@ begin  --architecture count_ticks
     elsif rising_edge(clk) then
       p_irq_ack <= (others => '0');
       if write_irq_ack_reg = '1' then
-        -- p_irq_ack_reg(31 downto 1) <= din(31 downto 1);
-        -- check_ack
         check_ack :
         for i in period_counters'range loop
           if (din(i) = '1') then
