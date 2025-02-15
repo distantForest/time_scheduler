@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  <igor_pa@live.com>
 -- Company    : AGSTU
 -- Created    : 2025-02-07
--- Last update: 2025-02-12
+-- Last update: 2025-02-14
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ entity irq_selector is
   ; ack_in_mx  : in  std_logic_vector (height - 1 downto 0)
   ; ack_in     : in  std_logic
   ; irq_out    : out std_logic
-  ; vector_out : out std_logic_vector (height - 1 downto 0)  -- 
+  ; vector_out : out natural range 0 to height - 1 --out std_logic_vector (height - 1 downto 0)  -- 
     );
 end irq_selector;
 
@@ -49,15 +49,17 @@ begin
   selector : process (reset_n, clk)
   begin
     if reset_n = '0' then
-      vector = 0;
-      irq_out <= '0';
+      vector   <= 0;
+      irq_out  <= '0';
+      irq_sent <= (others => '0');
     elsif rising_edge(clk) then
                                         --
-
       if irq_out = '0' then
         scan :                          -- the line is free
-        for i in range 0 to height - 1 loop
-          if (irq_in_mx(i) = '1') and (irq_sent(i) = '0') then
+        for i in 0 to height - 1 loop
+          if (irq_sent(i) = '1') then
+            exit;
+          elsif (irq_in_mx(i) = '1') then
             -- sending irq
             irq_out     <= '1';
             vector      <= i;
@@ -65,26 +67,19 @@ begin
             exit;
           end if;
         end loop scan;
-      elsif ack_in = '0' then           -- line is still active
+      elsif ack_in = '1' then           -- line is still active
         irq_out <= '0';
         vector  <= 0;
       end if;
       -- manage sent flag
-      for i in range 0 to height -1 loop
+      for i in 0 to height - 1 loop
         if (ack_in_mx(i) = '1') then
-          irq_sent(i) <= '1';
-          end if;
+          irq_sent(i) <= '0';
+        end if;
       end loop;
     end if;
-  end if;
-end process selector;
+  end process selector;
 
-acknowlege : process (reset_n, clk)
-  begin
-    if reset_n = '0' then
-      
-    end if;
-
-
+  vector_out <= vector;
 
 end architecture rtl;

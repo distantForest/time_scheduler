@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-02-02
+-- Last update: 2025-02-12
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ use ieee.numeric_std.all;
 entity period_controller is
 
   generic (
-    counter_heght : integer := 4; -- number of periodes
+    counter_height : integer := 4; -- number of periodes
 	 tick_length : integer := 25 * 1000 * 1000; -- tick length
 	 -- period_0_length : integer := 4;   -- period 0 
 	 per0 : integer := 1;
@@ -50,7 +50,7 @@ entity period_controller is
   port (
     clk        : in  std_logic;         -- system clock
     reset_n    : in  std_logic;         -- system reset
-    p0_irq_out : out std_logic_vector(counter_heght - 1 downto 0);
+    p0_irq_out : out std_logic; -- _vector(counter_height - 1 downto 0);
     -- avalon bus ports
     -- clk     : in  std_logic;
     cs_n       : in  std_logic;         --IP component address
@@ -59,7 +59,7 @@ entity period_controller is
     read_n     : in  std_logic;
     din        : in  std_logic_vector(31 downto 0);
     dout       : out std_logic_vector(31 downto 0)
-
+; vector : out  natural range 0 to counter_height - 1
     );
 end entity period_controller;
 architecture count_ticks_rtl of period_controller is
@@ -75,7 +75,21 @@ architecture count_ticks_rtl of period_controller is
       tick          : out std_logic;
       timer_data    : out std_logic_vector(31 downto 0));
   end component tick_function;
-type period_array is array (natural range 0  to counter_heght - 1) of natural;
+
+  component irq_selector is
+    generic (
+      height : natural);
+    port (
+      clk        : in  std_logic;
+      reset_n    : in  std_logic;
+      irq_in_mx  : in  std_logic_vector (height - 1 downto 0);
+      ack_in_mx  : in  std_logic_vector (height - 1 downto 0);
+      ack_in     : in  std_logic;
+      irq_out    : out std_logic;
+      vector_out : out std_logic_vector (height - 1 downto 0));
+  end component irq_selector;
+  
+type period_array is array (natural range 0  to counter_height - 1) of natural;
 type integer_array is array (natural range 0  to 15) of natural;
   signal period_counters : period_array;
   signal period_length : period_array;
@@ -102,13 +116,17 @@ type integer_array is array (natural range 0  to 15) of natural;
   signal timer_data                      : std_logic_vector(31 downto 0);
   signal tick, tick_front, tick_ack, p0b : std_logic;
   signal p0_counter_irq, p0_irq          : std_logic := '0';  --IRQ channel 0
-  signal p_counter_irq, p_irq, p_irq_ack : std_logic_vector(counter_heght - 1 downto 0) := (others => '0');
+  signal p_counter_irq, p_irq, p_irq_ack : std_logic_vector(counter_height - 1 downto 0) := (others => '0');
 
   signal p_irq_ack_reg        : std_logic_vector(31 downto 0);
   signal p_irq_enable_reg     : std_logic_vector(31 downto 0);
+  signal p_irq_vector_reg     : std_logic_vector(31 downto 0);  
   signal write_irq_enable_reg : std_logic;
   signal write_irq_ack_reg    : std_logic;
-  signal p0_irq_ack           : std_logic;
+  signal write_irq_vector_reg : std_logic;
+  signal p_irq_ack_gl           : std_logic;
+  
+  signal p_vector : natural range 0 to counter_height - 1;
 
   -- alias tick_for_sim : std_logic is tick;
 begin  --architecture count_ticks
@@ -125,7 +143,17 @@ begin  --architecture count_ticks
       tick          => tick,
       timer_data    => timer_data);
 
-
+  irq_selector_1: entity work.irq_selector
+    generic map (
+      height => counter_height)
+    port map (
+      clk        => clk,
+      reset_n    => reset_n,
+      irq_in_mx  => p_irq,
+      ack_in_mx  => p_irq_ack,
+      ack_in     => p_irq_ack_gl,
+      irq_out    => p0_irq_out,
+      vector_out => vector);
 
   -- tick positive front extraction
   front_extraction : process (tick, tick_ack, reset_n)
@@ -189,7 +217,7 @@ begin  --architecture count_ticks
 
   end process manage_irq;
 
-  p0_irq_out <= p_irq;
+  --p0_irq_out <= p_irq;
 
   --avalon bus interface
   write_irq_enable_reg <= '1' when (cs_n = '0' and write_n = '0' and addr = "00") else
@@ -221,13 +249,31 @@ begin  --architecture count_ticks
         check_ack :
         for i in period_counters'range loop
           if (din(i) = '1') then
-            p_irq_ack(i) <= '1';
+            p_irq_ack(i) <= '1';        -- give positive pulse one clk in length
           end if;
         end loop check_ack;
       end if;
     end if;
 
   end process irq_ack_register;
+
+  write_irq_vector_reg <= '1' when (cs_n = '0' and write_n = '0' and addr = "10") else
+                       '0';
+  irq_vector_register : process(reset_n, clk)
+
+  begin
+    if reset_n = '0' then
+      p_irq_vector_reg <= (others => '0');
+		p_irq_ack_gl <= '0';
+    elsif rising_edge(clk) then
+      p_irq_ack_gl <= '0';
+      if write_irq_vector_reg = '1' then
+        p_irq_ack_gl <= '1';
+        p_irq_vector_reg <= din;
+      end if;
+    end if;
+
+  end process irq_vector_register;
 
 
 end architecture count_ticks_rtl;
