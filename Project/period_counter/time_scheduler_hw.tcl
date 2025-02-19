@@ -41,20 +41,25 @@ set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
 add_fileset_file period_controller.vhd VHDL PATH ../hdl/period_controller.vhd TOP_LEVEL_FILE
 add_fileset_file tick_timer.vhd VHDL PATH ../hdl/tick_timer.vhd
+add_fileset_file irq_selector.vhd VHDL PATH ../hdl/irq_selector.vhd
 
 
 # 
 # parameters
 # 
-add_parameter counter_heght INTEGER 4 ""
-set_parameter_property counter_heght DEFAULT_VALUE 4
-set_parameter_property counter_heght DISPLAY_NAME counter_heght
-set_parameter_property counter_heght WIDTH ""
-set_parameter_property counter_heght TYPE INTEGER
-set_parameter_property counter_heght UNITS None
-set_parameter_property counter_heght ALLOWED_RANGES 1:16
-set_parameter_property counter_heght DESCRIPTION ""
-set_parameter_property counter_heght HDL_PARAMETER true
+add_parameter counter_height INTEGER 4 ""
+set_parameter_property counter_height DEFAULT_VALUE 4
+set_parameter_property counter_height DISPLAY_NAME counter_height
+set_parameter_property counter_height WIDTH ""
+set_parameter_property counter_height TYPE INTEGER
+set_parameter_property counter_height UNITS None
+set_parameter_property counter_height ALLOWED_RANGES 1:16
+set_parameter_property counter_height DESCRIPTION ""
+set_parameter_property counter_height HDL_PARAMETER true
+
+# add_system_info "COUNTER_HEIGHT" [get_parameter_value counter_height]
+
+
 add_parameter tick_length INTEGER 25000000 "tick puls length in system clock pulses"
 set_parameter_property tick_length DEFAULT_VALUE 25000000
 set_parameter_property tick_length DISPLAY_NAME tick_length
@@ -75,9 +80,17 @@ append param_name "per" $i
     set_parameter_property $param_name DEFAULT_VALUE [expr $i + 1] 
 }
 set_module_property VALIDATION_CALLBACK  adjust_height
+set_module_property ELABORATION_CALLBACK  post_elaboration
+
+proc post_elaboration {} {
+    set_module_assignment embeddedsw.CMacro.HEIGHT \
+	[get_parameter_value counter_height]
+    # add_sw_property COUNTER_HEIGHT [get_parameter_value counter_height]
+}
+
 
 proc adjust_height {} {
-    set per_len [get_parameter_value counter_heght]
+    set per_len [get_parameter_value counter_height]
 
     if {$per_len > 0} {    
 	for {set i 0} {$i < 16} {incr i} {
@@ -182,3 +195,17 @@ set_interface_property interrupt_sender SVD_ADDRESS_GROUP ""
 
 add_interface_port interrupt_sender p0_irq_out irq Output 1
 
+
+#
+# vector out
+#
+# add_interface vector conduit end
+# set_interface_property vector associatedClock clock
+# set_interface_property vector associatedReset reset
+# set_interface_property vector ENABLED true
+# set_interface_property vector EXPORT_OF ""
+# set_interface_property vector PORT_NAME_MAP ""
+# set_interface_property vector CMSIS_SVD_VARIABLES ""
+# set_interface_property vector SVD_ADDRESS_GROUP ""
+
+# add_interface_port vector vector name Output 1

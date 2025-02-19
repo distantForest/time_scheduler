@@ -142,7 +142,7 @@ ACDS_VERSION := 18.1
 ELF := period_counter_test_system.elf
 
 # Paths to C, C++, and assembly source files.
-C_SRCS := hello_world_small.c
+C_SRCS := period_counter_test_system.c
 CXX_SRCS :=
 ASM_SRCS :=
 
@@ -177,7 +177,7 @@ CRT0 :=
 SYS_LIB :=
 
 # Define path to the root of the BSP.
-BSP_ROOT_DIR := ../period_counter_test_system_bsp/
+BSP_ROOT_DIR := ../period_counter_test_system_bsp
 
 # List of application specific include directories, library directories and library names
 APP_INCLUDE_DIRS :=

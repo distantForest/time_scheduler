@@ -99,7 +99,7 @@ begin  -- architecture sim_testbench
       irq_in_mx  => irq_in_mx,
       ack_in_mx  => ack_in_mx,
       ack_in     => ack_in,
-      irq_out    => irq_out,
+      p_irq_out    => irq_out,
       vector_out => vector_out);
 
   spy_process : process

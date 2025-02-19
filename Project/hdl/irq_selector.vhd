@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  <igor_pa@live.com>
 -- Company    : AGSTU
 -- Created    : 2025-02-07
--- Last update: 2025-02-14
+-- Last update: 2025-02-16
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -29,13 +29,13 @@ entity irq_selector is
     );
   port(
     clk      : in  std_logic
-  ; reset_n    : in  std_logic
-                                          -- 
-  ; irq_in_mx  : in  std_logic_vector (height - 1 downto 0)
-  ; ack_in_mx  : in  std_logic_vector (height - 1 downto 0)
-  ; ack_in     : in  std_logic
-  ; irq_out    : out std_logic
-  ; vector_out : out natural range 0 to height - 1 --out std_logic_vector (height - 1 downto 0)  -- 
+; reset_n    : in  std_logic
+                                        -- 
+; irq_in_mx  : in  std_logic_vector (height - 1 downto 0)
+; ack_in_mx  : in  std_logic_vector (height - 1 downto 0)
+; ack_in     : in  std_logic
+; p_irq_out  : out std_logic
+; vector_out : out natural range 0 to height - 1  --out std_logic_vector (height - 1 downto 0)  -- 
     );
 end irq_selector;
 
@@ -43,6 +43,7 @@ architecture rtl of irq_selector is
 
   signal vector   : natural range 0 to height - 1;
   signal irq_sent : std_logic_vector (height - 1 downto 0);
+  signal irq_out  : std_logic := '0';
 
 begin
 
@@ -81,5 +82,6 @@ begin
   end process selector;
 
   vector_out <= vector;
+  p_irq_out  <= irq_out;
 
 end architecture rtl;

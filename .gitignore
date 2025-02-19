@@ -1,3 +1,4 @@
+synthesis
 **/#*#
 **/*.bak*
 **/*~
@@ -11,3 +12,9 @@ msim_transcript
 **/*.opt
 **/*.wlf
 **/*.vstf
+*_bsp
+software
+unsaved*
+#
+!*.h
+!*.c
