@@ -44,4 +44,24 @@
 
 typedef void (*period_function_ptr)(void);
 
+typedef struct  {
+    unsigned base;
+    unsigned irq;
+    unsigned irq_id;
+    period_function_ptr period_functions[];
+} general_context;
+
+#define TIME_SCHEDULER_CONTEXT(name,  ...) \
+    struct name##_context {             \
+        unsigned base;               \
+        unsigned irq;               \
+        unsigned irq_id;            \
+        period_function_ptr functions[name##_HEIGHT];};    \
+    struct name##_context name##_i = {  \
+                                        .base = name##_BASE, \
+                                        .irq = name##_IRQ,  \
+                                        .irq_id = name##_IRQ_INTERRUPT_CONTROLLER_ID, \
+                                        .functions = {__VA_ARGS__}};
+
+
 #endif /* INC_TIME_SCHEDULER_REGS_H_ */
