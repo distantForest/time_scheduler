@@ -6,7 +6,7 @@ vhdl_libs/
 synthesis/
 simulation/
 software/*
-software/!*.c
+
 *.rpt
 *.chg
 *.qws
@@ -15,4 +15,5 @@ software/!*.c
 \#*#
 *.bak
 *~
+
 
