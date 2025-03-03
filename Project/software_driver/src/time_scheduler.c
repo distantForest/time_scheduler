@@ -16,10 +16,11 @@
 
 void alt_isr_period_0 (void* isr_context){
     general_context *base = (general_context*)isr_context;
-	unsigned vector = IORD_TIME_SCHEDULER_IRQ_VECTOR_REG(TIME_SCHEDULER_0_BASE);
+	unsigned vector = IORD_TIME_SCHEDULER_IRQ_VECTOR_REG(base->base);
 
-	IOWR_TIME_SCHEDULER_IRQ_VECTOR_REG(base, 0x0);
-	*(unsigned*)isr_context = (*(unsigned*)isr_context + 1) & 0xf;
+	alt_printf("..irq vector %x",vector);
+	IOWR_TIME_SCHEDULER_IRQ_VECTOR_REG(base->base, 0x0);
+	//*(unsigned*)isr_context = (*(unsigned*)isr_context + 1) & 0xf;
 
 	// call period function by vector
 	base->period_functions[vector]();
@@ -38,5 +39,7 @@ void time_scheduler_init(general_context* scheduler){
             )){
         alt_printf("Error ISR register scheduler_%x",scheduler->irq);
     }
-
+    else{
+        alt_printf("Register success, irq_id %x, irq %x, base %x\n",scheduler->irq_id, scheduler->irq, scheduler->base);
+    }
 }
