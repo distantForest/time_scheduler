@@ -82,10 +82,31 @@ append param_name "per" $i
 set_module_property VALIDATION_CALLBACK  adjust_height
 set_module_property ELABORATION_CALLBACK  post_elaboration
 
+
+proc log2ceil {arg} {
+    if {$arg <= 1} {
+        return 0
+    }
+    
+    set log 0
+    set tmp 1
+    
+    while {$tmp < $arg} {
+        set tmp [expr {$tmp * 2}]
+        set log [expr {$log + 1}]
+    }
+    
+    return $log
+}
+
 proc post_elaboration {} {
     set_module_assignment embeddedsw.CMacro.HEIGHT \
 	[get_parameter_value counter_height]
     # add_sw_property COUNTER_HEIGHT [get_parameter_value counter_height]
+    add_interface_port avalon_slave_0 addr address Input \
+	[log2ceil [expr {[get_parameter_value counter_height] + 1 + 4}]]
+    # 2
+
 }
 
 
@@ -142,7 +163,9 @@ add_interface_port reset reset_n reset_n Input 1
 
 # 
 # connection point avalon_slave_0
-# 
+#
+
+
 add_interface avalon_slave_0 avalon end
 set_interface_property avalon_slave_0 addressUnits WORDS
 set_interface_property avalon_slave_0 associatedClock clock
@@ -167,7 +190,7 @@ set_interface_property avalon_slave_0 CMSIS_SVD_VARIABLES ""
 set_interface_property avalon_slave_0 SVD_ADDRESS_GROUP ""
 
 add_interface_port avalon_slave_0 cs_n chipselect_n Input 1
-add_interface_port avalon_slave_0 addr address Input 2
+# add_interface_port avalon_slave_0 addr address Input 2
 add_interface_port avalon_slave_0 write_n write_n Input 1
 add_interface_port avalon_slave_0 read_n read_n Input 1
 add_interface_port avalon_slave_0 din writedata Input 32
