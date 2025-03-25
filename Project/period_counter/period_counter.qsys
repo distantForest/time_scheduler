@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "3";
          type = "int";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "1";
          type = "int";
       }
    }
@@ -53,7 +53,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "2";
          type = "int";
       }
    }
@@ -221,7 +221,7 @@
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "4";
          type = "int";
       }
    }
@@ -509,7 +509,7 @@
   <parameter name="per13" value="14" />
   <parameter name="per14" value="15" />
   <parameter name="per15" value="16" />
-  <parameter name="per2" value="7" />
+  <parameter name="per2" value="5" />
   <parameter name="per3" value="4" />
   <parameter name="per4" value="5" />
   <parameter name="per5" value="6" />
@@ -603,17 +603,17 @@
    kind="reset"
    version="18.1"
    start="clk_0.clk_reset"
-   end="time_scheduler_0.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="clk_0.clk_reset"
    end="nios2_gen2_0.reset" />
  <connection
    kind="reset"
    version="18.1"
    start="clk_0.clk_reset"
    end="jtag_uart_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="clk_0.clk_reset"
+   end="time_scheduler_0.reset" />
  <connection
    kind="reset"
    version="18.1"
@@ -623,17 +623,17 @@
    kind="reset"
    version="18.1"
    start="nios2_gen2_0.debug_reset_request"
-   end="time_scheduler_0.reset" />
- <connection
-   kind="reset"
-   version="18.1"
-   start="nios2_gen2_0.debug_reset_request"
    end="nios2_gen2_0.reset" />
  <connection
    kind="reset"
    version="18.1"
    start="nios2_gen2_0.debug_reset_request"
    end="jtag_uart_0.reset" />
+ <connection
+   kind="reset"
+   version="18.1"
+   start="nios2_gen2_0.debug_reset_request"
+   end="time_scheduler_0.reset" />
  <connection
    kind="reset"
    version="18.1"

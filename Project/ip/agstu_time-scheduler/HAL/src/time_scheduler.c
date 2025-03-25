@@ -9,8 +9,8 @@
 #include "io.h"
 #include "system.h"
 #include <sys/alt_irq.h>
-#include "time_scheduler_regs.h"
-
+#include "agstu_time_scheduler_regs.h"
+#include "agstu_time_scheduler.h"
 
 __attribute__((weak)) int weak_int = 0;
 

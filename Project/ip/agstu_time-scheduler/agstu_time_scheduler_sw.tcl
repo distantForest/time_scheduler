@@ -1,0 +1,12 @@
+create_driver agstu_time_scheduler
+set_sw_property hw_class_name time_scheduler
+add_sw_property supported_bsp_type hal
+set_sw_property min_compatible_hw_version 0.0.1
+
+# sources
+add_sw_property c_source HAL/src/time_scheduler.c
+add_sw_property include_source inc/agstu_time_scheduler_regs.h
+add_sw_property include_source HAL/inc/agstu_time_scheduler.h
+
+set_sw_property supported_interrupt_apis enhanced_interrupt_api
+
