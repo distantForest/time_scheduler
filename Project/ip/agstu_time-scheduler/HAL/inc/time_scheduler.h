@@ -19,6 +19,8 @@
 
 
 typedef void (*period_function_ptr)(void);
+typedef period_function_ptr function_array_t[];
+
 
 // time scheduler instance declarations
 typedef struct  {
@@ -40,5 +42,25 @@ typedef struct  {
                                         .irq_id = name##_IRQ_INTERRUPT_CONTROLLER_ID, \
                                         .functions = {__VA_ARGS__}};
 
+#define TIME_SCHEDULER_INIT(name1, name2) \
+  { \
+    const char a[] = " this is n_a_m_e_1 name1##,"; \
+    const char b[] = " this is n-a-m-e-2 name2##."; \
+   };
+
+#define TIME_SCHEDULER_INSTANCE(name, class) \
+    struct name##_context {             \
+        unsigned base;               \
+        unsigned irq;               \
+        unsigned irq_id;            \
+        period_function_ptr (*functions)[name##_HEIGHT];};	\
+    __attribute__((weak)) period_function_ptr (*name##_functions)[name##_HEIGHT] = NULL; \
+    struct name##_context name##_i = {  \
+                                        .base = name##_BASE, \
+                                        .irq = name##_IRQ,  \
+                                        .irq_id = name##_IRQ_INTERRUPT_CONTROLLER_ID, \
+                                        .functions = name##_functions};
+  
+void time_scheduler_init(general_context* scheduler);
 
 #endif /* INC_TIME_SCHEDULER_H_ */

@@ -10,7 +10,7 @@
 #include "system.h"
 #include <sys/alt_irq.h>
 #include "agstu_time_scheduler_regs.h"
-#include "agstu_time_scheduler.h"
+#include "time_scheduler.h"
 
 __attribute__((weak)) int weak_int = 0;
 
