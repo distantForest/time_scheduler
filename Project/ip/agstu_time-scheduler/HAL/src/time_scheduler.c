@@ -14,25 +14,26 @@
 
 __attribute__((weak)) int weak_int = 0;
 
+unsigned depth = 0;
 void alt_isr_period_0 (void* isr_context){
-  static unsigned depth = 0;
   general_context *base = (general_context*)isr_context;
   unsigned vector = IORD_TIME_SCHEDULER_IRQ_VECTOR_REG(base->base);
   alt_u32 irq_enabled;
 
   depth += 1;
   IOWR_TIME_SCHEDULER_IRQ_VECTOR_REG(base->base, 0x0);
-//  __asm__ volatile ("rdctl %0, ienable" : "=r" (irq_enabled));
-//  __asm__ volatile ("wrctl ienable, %0" : : "r" (irq_enabled | (1 << base->irq)) : "memory");
-//  __asm__ volatile ("wrctl status, %0" : : "r" (1 << 0) : "memory");
+ __asm__ volatile ("rdctl %0, ienable" : "=r" (irq_enabled));
+ __asm__ volatile ("wrctl ienable, %0" : : "r" (irq_enabled | (1 << base->irq)) : "memory");
+ __asm__ volatile ("wrctl status, %0" : : "r" (1 << 0) : "memory");
 
+  alt_printf("function %x\n",(*(base->period_functions))[vector]);
   alt_printf("..irq vector %x, depth %x",vector, depth);
 
   // call period function by vector
-  base->period_functions[vector]();
+  if ((*(base->period_functions))[vector]){(*base->period_functions)[vector]();}
 
-//  __asm__ volatile ("wrctl status, %0" : : "r" (0) : "memory");
-//  __asm__ volatile ("wrctl ienable, %0" : : "r" (irq_enabled) : "memory");
+ __asm__ volatile ("wrctl status, %0" : : "r" (0) : "memory");
+ __asm__ volatile ("wrctl ienable, %0" : : "r" (irq_enabled) : "memory");
   IOWR_TIME_SCHEDULER_IRQ_ACK_REG(base->base, 1 << vector);
   depth -= 1;
 }

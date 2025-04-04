@@ -9,5 +9,6 @@ add_sw_property include_source inc/agstu_time_scheduler_regs.h
 add_sw_property include_source HAL/inc/time_scheduler.h
 
 set_sw_property supported_interrupt_apis enhanced_interrupt_api
+set_sw_property isr_preemption_supported true
 set_sw_property auto_initialize true
 

@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-03-11
+-- Last update: 2025-04-02
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -300,10 +300,14 @@ begin  --architecture count_ticks
     elsif rising_edge(clk) then
       check_irq :
       for i in period_counters'range loop
-        if (p_counter_irq(i) = '1') and (p_irq_enable_reg(i) = '1') then
-          p_irq(i) <= '1';
-        end if;
-        if p_irq_ack(i) = '1' then
+        if (p_irq_enable_reg(i) = '1') then
+          if (p_counter_irq(i) = '1') then
+            p_irq(i) <= '1';
+          end if;
+          if p_irq_ack(i) = '1' then
+            p_irq(i) <= '0';
+          end if;
+        else
           p_irq(i) <= '0';
         end if;
       end loop check_irq;
