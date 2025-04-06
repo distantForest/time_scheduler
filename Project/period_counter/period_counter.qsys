@@ -289,6 +289,14 @@
          type = "String";
       }
    }
+   element period_counter
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
    element time_scheduler_0
    {
       datum _sortIndex
@@ -590,7 +598,7 @@
  <module
    name="time_scheduler_0"
    kind="time_scheduler"
-   version="1.0"
+   version="1.0.1"
    enabled="1">
   <parameter name="counter_height" value="3" />
   <parameter name="per0" value="1" />

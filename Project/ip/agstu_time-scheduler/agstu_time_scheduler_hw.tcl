@@ -4,7 +4,7 @@
 
 
 # 
-# time_scheduler "time_scheduler" v1.0
+# time_scheduler "time_scheduler" v1.0.1
 #  2025.01.28.19:24:55
 # 
 # 
@@ -20,7 +20,7 @@ package require -exact qsys 16.1
 # 
 set_module_property DESCRIPTION ""
 set_module_property NAME time_scheduler
-set_module_property VERSION 1.0
+set_module_property VERSION 1.0.1
 set_module_property INTERNAL false
 set_module_property OPAQUE_ADDRESS_MAP true
 set_module_property AUTHOR ""

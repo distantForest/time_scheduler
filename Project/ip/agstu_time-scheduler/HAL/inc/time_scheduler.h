@@ -10,13 +10,37 @@
 
 //#include "io.h"
 #include "sys/alt_stdio.h"
+#include "agstu_time_scheduler_regs.h"
 
 #define TIME_SCHEDULER_VECTOR_READ(x) ( \
-    IORD_32DIRECT(x, \
+    IORD_32DIRECT(CONCATENATE(x, _BASE), \
     TIME_SCHEDULER_IRQ_VECTOR_REG))
-#define TIME_SCHEDULER_TIMER_RUN(X) {  \
-        IOWR_32DIRECT(X,TIME_SCHEDULER_CS_REG,(0x1));}
 
+#define TIME_SCHEDULER_TIMER_RUN(X) do{  \
+    IOWR_32DIRECT(  \
+		    CONCATENATE(X, _BASE),	\
+		    TIME_SCHEDULER_CS_REG,	\
+		    (0x1));  \
+  } while (0)
+
+#define TIME_SCHEDULER_TIMER_STOP(X) do{  \
+    IOWR_32DIRECT(  \
+		    CONCATENATE(X, _BASE),	\
+		    TIME_SCHEDULER_CS_REG,	\
+		    (0x0)); \
+  } while (0)
+
+#define TIME_SCHEDULER_PERIOD_ENABLE(name, period) do{ \
+    IOWR_TIME_SCHEDULER_IRQ_ENABLE_REG( \
+    CONCATENATE(name, _BASE), \
+    (IORD_TIME_SCHEDULER_IRQ_ENABLE_REG(CONCATENATE(name, _BASE)) | (1 << period))); \
+      } while (0)
+
+#define TIME_SCHEDULER_PERIOD_SET(name, period_no, period) do{	\
+    IOWR_TIME_SCHEDULER_IRQ_ENABLE_REG( \
+    CONCATENATE(name, _BASE), \
+    (IORD_TIME_SCHEDULER_IRQ_ENABLE_REG(CONCATENATE(name, _BASE)) | (1 << period))); \
+      } while (0)
 
 typedef void (*period_function_ptr)(void);
 typedef period_function_ptr function_array_t[];
