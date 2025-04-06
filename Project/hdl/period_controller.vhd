@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-04-02
+-- Last update: 2025-04-05
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -220,27 +220,27 @@ begin  --architecture count_ticks
       p_irq_vector_reg <= (others => '0');
       p_irq_ack_gl     <= '0';
 
-    elsif write_regs = '1' then
-      if rising_edge(clk) then
-			p_irq_ack <= (others => '0');
-			p_irq_ack_gl <= '0';
+    elsif rising_edge(clk) then
+      p_irq_ack    <= (others => '0');
+      p_irq_ack_gl <= '0';
+      if write_regs = '1' then
         case to_integer(unsigned(addr)) is
-          
+
           -- write control status register
           when p_irq_cs_reg_addr =>
             p_counter_run <= din(0);
-            
+
           -- write period limits
           when p_limits_addr to (p_limits_addr + counter_height) =>
             if p_counter_run = '1' then
               period_length(to_integer(unsigned(addr)) - p_limits_addr) <= to_integer(unsigned(din));
             end if;
 
-        -- write irq enable register
+          -- write irq enable register
           when p_irq_enable_reg_addr =>
             p_irq_enable_reg <= din;
 
-            -- write irq acknowlege 
+          -- write irq acknowlege 
           when p_irq_ack_reg_addr =>
             check_ack :
             for i in period_counters'range loop
@@ -249,7 +249,7 @@ begin  --architecture count_ticks
               end if;
             end loop check_ack;
 
-            -- write global acknowlege
+          -- write global acknowlege
           when p_irq_vector_reg_addr =>
             p_irq_ack_gl     <= '1';
             p_irq_vector_reg <= din;

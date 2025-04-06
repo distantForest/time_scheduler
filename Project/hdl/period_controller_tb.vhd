@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  <igor@fedora>
 -- Company    : AGSTU
 -- Created    : 2025-04-03
--- Last update: 2025-04-04
+-- Last update: 2025-04-05
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -40,6 +40,16 @@ end entity period_controller_tb;
 
 architecture modelsim of period_controller_tb is
 
+  --types
+  type bus_operation is (IDLE, READ, WRITE);
+  type t_OPERATION_REQUEST is record
+    op_kind       : bus_operation;
+    op_address    : integer;
+    op_data_read  : std_logic_vector(31 downto 0);
+    op_data_write : std_logic_vector(31 downto 0);
+  end record t_OPERATION_REQUEST;
+
+
   -- component generics
   constant counter_height : integer := 4;
   constant tick_length    : integer := 6; -- 25 * 1000 * 1000;
@@ -60,6 +70,13 @@ architecture modelsim of period_controller_tb is
   constant per14          : integer := 15;
   constant per15          : integer := 16;
 
+  constant p_irq_enable_reg_addr : natural := 0;
+  constant p_irq_ack_reg_addr : natural := 1;
+  constant p_irq_vector_reg_addr : natural := 2;
+  constant p_irq_cs_reg_addr : natural := 3;
+  constant p_limits_addr : natural := 4;
+
+
   -- component ports
 --  signal clk        : std_logic;
   signal reset_n    : std_logic;
@@ -72,12 +89,10 @@ architecture modelsim of period_controller_tb is
   signal dout       : std_logic_vector(31 downto 0);
 
 
-  type bus_operation is (IDLE, READ, WRITE);
   
   -- clock
   signal Clk : std_logic := '1';
 
-  signal vector : natural range 0 to counter_height -1;
   signal bus_done_n : std_logic;
   signal vector_reg_op : bus_operation := IDLE;
   signal bus_data_read : std_logic_vector(31 downto 0);
@@ -86,6 +101,12 @@ architecture modelsim of period_controller_tb is
   signal do_read : std_logic := '0';
   signal do_operation : bus_operation;
 
+  signal test_seq_operations : t_OPERATION_REQUEST;
+
+  signal irq_resp_operations : t_OPERATION_REQUEST;
+  signal vector : natural range 0 to counter_height -1;
+  signal irq_front:std_logic;
+  
     -- Wait for a given number of clock cycles
   procedure wait_cycles(cycles : integer) is
   begin
@@ -111,15 +132,7 @@ architecture modelsim of period_controller_tb is
     )
   is
   begin
-    wait until clk = '0';
-    if reset_n = '0' then
-      address_out <= (others => '0');
-      cs_n        <= '1';
-      read_n      <= '1';
-      data_read   <= (others => '0');
-      operation   <= IDLE;
-    else
-      wait until do_operation'event;
+--      wait until do_operation'event;
       Read_Operation :
       if do_operation = READ then
         -- wait until (do_read = '1') and (clk = '1');
@@ -134,6 +147,7 @@ architecture modelsim of period_controller_tb is
         cs_n        <= '1';
         read_n      <= '1';
         wait until clk = '1';
+        address_out <= (others => 'X');
         operation   <= IDLE;
         wait until do_operation = IDLE;
       elsif do_operation = WRITE then
@@ -147,10 +161,10 @@ architecture modelsim of period_controller_tb is
         cs_n        <= '1';
         write_n     <= '1';
         data_in     <= (others => 'X');
+        address_out <= (others => 'X');
         operation   <= IDLE;
         wait until do_operation = IDLE;
       end if Read_Operation;
-    end if;
   end procedure;
 
 
@@ -212,68 +226,137 @@ begin  -- architecture modelsim
   Read_Bus_Proc : process
 --    (reset_n, cs_n, read_n, Clk)
   begin
-    modelsim.bus_read(
-     address => bus_address,
-     address_out =>  addr,
-     cs_n => cs_n,
-     read_n => read_n,
-     write_n => write_n,
-     data_read => bus_data_read,
-     data_write => bus_data_write,
-     clk => Clk, reset_n => reset_n
-     , data_out => dout, data_in => din,
-     do_operation => do_operation,
-     operation => vector_reg_op
-      );
- --   wait;
+    wait until clk = '0';
+    if reset_n = '0' then
+      addr          <= (others => '0');
+      cs_n          <= '1';
+      read_n        <= '1';
+      din           <= (others => '0');
+      vector_reg_op <= IDLE;
+    else
+      wait until test_seq_operations.op_kind'event or irq_resp_operations.op_kind'event;
+      if test_seq_operations.op_kind'event then
+        modelsim.bus_read(
+          address      => test_seq_operations.op_address,
+          address_out  => addr,
+          cs_n         => cs_n,
+          read_n       => read_n,
+          write_n      => write_n,
+          data_read    => test_seq_operations.op_data_read,
+          data_write   => test_seq_operations.op_data_write,
+          clk          => Clk, reset_n => reset_n
+, data_out             => dout, data_in => din,
+          do_operation => test_seq_operations.op_kind,
+          operation    => vector_reg_op
+          );
+      elsif irq_resp_operations.op_kind'event then
+        modelsim.bus_read(
+          address      => irq_resp_operations.op_address,
+          address_out  => addr,
+          cs_n         => cs_n,
+          read_n       => read_n,
+          write_n      => write_n,
+          data_read    => irq_resp_operations.op_data_read,
+          data_write   => irq_resp_operations.op_data_write,
+          clk          => Clk, reset_n => reset_n
+, data_out             => dout, data_in => din,
+          do_operation => irq_resp_operations.op_kind,
+          operation    => vector_reg_op
+          );
+        null;
+      end if;
+    end if;
+  --   wait;
   end process Read_Bus_Proc;
 
   -- test sequence
   Test_Sequence : process
   begin
     wait until clk = '0';
+-- reset test sequence 
     do_read <= '0';
-    do_operation <= IDLE;
-   -- wait until reset_n = '0';
+    test_seq_operations.op_kind <= IDLE;
     wait until reset_n = '1';
-   wait_cycles(7);
-    bus_address <= 0;
-   do_operation <= READ;
+
+    wait_cycles(7);
+    
+    -- read interrupt enable register
+    test_seq_operations.op_address <= 0;
+    test_seq_operations.op_kind <= READ;
     wait until vector_reg_op = IDLE;
-    -- wait until vector_reg_op = READ;
-    -- wait until vector_reg_op = IDLE;
-    do_operation <= IDLE;
+    test_seq_operations.op_kind <= IDLE;
 
     wait_cycles(3);
-    bus_data_write <= std_logic_vector(to_unsigned(1,bus_data_write'length));
-    do_operation <= WRITE;
+    
+-- write 1 to interrupt enable register
+    test_seq_operations.op_data_write <=
+      std_logic_vector(to_unsigned(1,test_seq_operations.op_data_write'length));
+    test_seq_operations.op_kind <= WRITE;
     wait until vector_reg_op = IDLE;
-    -- wait until vector_reg_op = WRITE;
-    -- wait until vector_reg_op = IDLE;
-    do_operation <= IDLE;
+    test_seq_operations.op_kind <= IDLE;
+
+    wait_cycles(3);
+    -- run the component
+    test_seq_operations.op_data_write <=
+      std_logic_vector(to_unsigned(1,test_seq_operations.op_data_write'length));
+    test_seq_operations.op_address <= p_irq_cs_reg_addr;
+    test_seq_operations.op_kind <= WRITE;
+    wait until vector_reg_op = IDLE;
+    test_seq_operations.op_kind <= IDLE;
     
 
     wait;
   end process Test_Sequence;
     
-  -- interrupt service
-  -- Interrupt_Service_Proc : process
+  --interrupt service
+  Interrupt_Service_Proc : process
   --   (reset_n, Clk)
-  -- begin
-  --   if reset_n = '0' then
-  --     vector = 0;
-  --     irq_front <=  '0';
-  --   elsif rising_edge(Clk) then
-  --     if (p0_irq_out = '1') then
-  --       if (irq_front = '0') then
-  --         irq_front <= '1';
-  --       -- serve interrupt
-  --       end if;
-  --     else
-  --       irq_front <= '0';
-  --     end if;
+  begin
+    wait until clk = '0';
+    if reset_n = '0' then
+      vector                      <= 0;
+      irq_front                   <= '0';
+      irq_resp_operations.op_kind <= IDLE;
 
-  --   end process Interrupt_Service_Proc;
+    else
+      wait until clk'event and (clk = '1');
+--if rising_edge(Clk) then
+      if (p0_irq_out = '1') then
+        if (irq_front = '0') then
+          irq_front <= '1';
+
+          -- serve interrupt
+          wait_cycles(9);
+          -- read irq vector
+          irq_resp_operations.op_address            <= p_irq_vector_reg_addr;
+          irq_resp_operations.op_kind               <= READ;
+          wait until vector_reg_op = IDLE;
+          vector                                    <= to_integer(unsigned(irq_resp_operations.op_data_read));
+          irq_resp_operations.op_kind               <= IDLE;
+
+          wait_cycles(3);
+          -- acknowledge
+          irq_resp_operations.op_data_write         <= (others => '0');
+          irq_resp_operations.op_address            <= p_irq_vector_reg_addr;
+          irq_resp_operations.op_kind               <= WRITE;
+          wait until vector_reg_op = IDLE;
+          irq_resp_operations.op_kind               <= IDLE;
+          -- do isr
+          wait_cycles(11);
+          -- acknowledge by vector
+          irq_resp_operations.op_data_write         <= (others => '0');
+          irq_resp_operations.op_data_write(vector) <= '1';
+          irq_resp_operations.op_address            <= p_irq_ack_reg_addr;
+          irq_resp_operations.op_kind               <= WRITE;
+          wait until vector_reg_op = IDLE;
+          irq_resp_operations.op_kind               <= IDLE;
+        end if;
+      else
+        irq_front <= '0';
+      end if;
+    end if;
+
+  end process Interrupt_Service_Proc;
 
   --     -- write/read vector register
   --     Write_Read_Reg : process
