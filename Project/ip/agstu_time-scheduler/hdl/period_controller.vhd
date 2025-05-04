@@ -278,7 +278,7 @@ begin  --architecture count_ticks
         -- update counters
         update_counters :
         for i in period_counters'range loop
-          if period_counters(i) > period_length(i) then  --issue irq
+          if period_counters(i) >= period_length(i) then  --issue irq
             period_counters(i) <= 0;
             p_counter_irq(i)   <= '1';
           else
