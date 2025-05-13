@@ -62,7 +62,9 @@ Time scheduler functionality is designed according to functional diagram, shown 
 
 **1.1 The documentation shall be formatted in markup language Markdown.**
 
-**1.2 The final report shall be created in MS Word document format docx.**
+**1.2 A structured standard report shall be created in MS Word document format docx.**
+- **1.2.1 The name of the report Igor_Parchakov_exjobb_B.docx**
+- **1.2.2 Max 30 pages.**
 
 
 
