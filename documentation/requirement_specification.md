@@ -2,18 +2,6 @@
 The purpose of this project is to create a complete component that manages the execution of functions (implemented as standard C-functions) according to a predefined time schedule. The component is referred as Time Scheduler component in the project.
 
 ## Functional Requirements
-Time scheduler functionality is designed according to functional diagram, shown on [Figure 1](#rec-spec-figure_1).
-
-
-<div style="float:center" markdown="1">
-
-<a name="rec-spec-figure_1"></a>
-
-|![](./media/functional_diagram.png "Time scheduler functional diagram")|
-|---|
-|*Figure 1. Time scheduler functional diagram.*|
-
-</div>
 
 ### 1. Component Functionality
 
