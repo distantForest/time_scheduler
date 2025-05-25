@@ -37,17 +37,16 @@ The hardware module architecture is shown on [Figure 2](#fig-hw-arc).
 
 </div>
 
-The hardware module concist of three blocks:
+The hardware module is connected to the Avalon bus and is controlled via a set of registers. The hardware module consists of three blocks. Each block has control/data registers connected to the Avalon Memory-Mapped interface. All the registers are available for the software running on the Nios II processor connected to the Avalon bus. The blocks that constitute the hardware module are:
 
-  * **Timer function**.
-  * **Period counter**.
-  * **IRQ selector**.
-  
-  Each block has control/data registers connected to the Avalon Memory Mapped interface. All the registers are available for the software ran on Nios II processor connected to tne Avalon bus.
+* **Timer function**. This block generates tick pulses. The tick pulse period is configured in the hardware synthesis phase. The tick function can be started and stopped via a register.
+* **Period counter**. This block contains a set of tick pulse counters. The number of counters is defined in the hardware synthesis phase. The period limits can be set individually in the hardware synthesis phase and via registers as well. The period counters feed the generated IRQ to the IRQ selector block.
+* **IRQ selector**. This block manages the individually generated period IRQs over a single interrupt line. The IRQ selector uses the period index as a vector. The IRQ selector expects an acknowledgment for IRQ taking and an acknowledgment for period function completion. The period index represents the priority of the period. Priority 0 is the highest. The lower the period index, the higher the priority.
   
 ## Software architecture ##
 
-The component software architecture is shown on [Figure 3](#fig-sw-arc).
+The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 3](#fig-sw-arc).
+
 <div style="float:center" markdown="1">
 
 <a name="fig-sw-arc"></a>
@@ -58,9 +57,21 @@ The component software architecture is shown on [Figure 3](#fig-sw-arc).
 
 </div>
 
+The device driver includes the following:
 
+* **Device Instantiation** and **Device Initialization** blocks. HAL (Hardware Abstraction Layer) uses these blocks to construct the system startup section.  
+  The *Device Instantiation* block creates a device instance for each Time Scheduler device present in the system.  
+  The *Device Initialization* block performs initial setup and configuration of each Time Scheduler device present in the system.
 
-<div style="float:center" markdown="1">
+* The **Interrupt Service Routine (ISR)** interacts with the Time Scheduler device through the *Device Register Interface*.  
+  The ISR receives a pointer to the device instance (requiring service) as an input parameter.  
+  Each device instance includes a pointer to a period function table, which is provided by the user software for each Time Scheduler device present in the system.
+
+* The **Device Register Interface** provides access to the Time Scheduler device referenced by the corresponding device instance.
+
+# COMPONENT CONFIGURATION. #
+
+<Div style="float:center" markdown="1">
 ![Time scheduler functional diagram](./media/time-scheduler-HW-architecture.png "Time scheduler functional diagram")
 
 figure 31.
