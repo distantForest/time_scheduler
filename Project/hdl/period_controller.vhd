@@ -54,24 +54,24 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity period_controller is
   generic (
-    counter_height : integer := 4;      -- number of periods
-    tick_length    : integer := 25 * 1000 * 1000;   -- tick length
-    per0           : integer := 1;
-    per1           : integer := 2;
-    per2           : integer := 3;
-    per3           : integer := 4;
-    per4           : integer := 5;
-    per5           : integer := 6;
-    per6           : integer := 7;
-    per7           : integer := 8;
-    per8           : integer := 9;
-    per9           : integer := 10;
-    per10          : integer := 11;
-    per11          : integer := 12;
-    per12          : integer := 13;
-    per13          : integer := 14;
-    per14          : integer := 15;
-    per15          : integer := 16
+    counter_height : natural := 4;      -- number of periods
+    tick_length    : natural := 25 * 1000 * 1000;   -- tick length
+    per0           : natural := 1;
+    per1           : natural := 2;
+    per2           : natural := 3;
+    per3           : natural := 4;
+    per4           : natural := 5;
+    per5           : natural := 6;
+    per6           : natural := 7;
+    per7           : natural := 8;
+    per8           : natural := 9;
+    per9           : natural := 10;
+    per10          : natural := 11;
+    per11          : natural := 12;
+    per12          : natural := 13;
+    per13          : natural := 14;
+    per14          : natural := 15;
+    per15          : natural := 16
   );
   port (
     clk        : in  std_logic;         -- system clock
@@ -90,7 +90,7 @@ architecture count_ticks_rtl of period_controller is
 
   component tick_function is
     generic (
-      g_timer_limit : integer);
+      g_timer_limit : natural);
     port (
       reset_timer_n : in  std_logic;
       clk           : in  std_logic;
@@ -148,7 +148,6 @@ architecture count_ticks_rtl of period_controller is
     per14,
     per15
     );
-  signal counter_p0                      : integer                                       := 0;
   signal timer_data                      : std_logic_vector(31 downto 0);
   signal tick, tick_front, tick_ack, p0b : std_logic;
   signal p0_counter_irq, p0_irq          : std_logic                                     := '0';  --IRQ channel 0

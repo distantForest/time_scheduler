@@ -59,32 +59,127 @@ The software driver of the **Time Scheduler** component is designed to be includ
 
 The device driver includes the following:
 
-* **Device Instantiation** and **Device Initialization** blocks. HAL (Hardware Abstraction Layer) uses these blocks to construct the system startup section.  
-  The *Device Instantiation* block creates a device instance for each Time Scheduler device present in the system.  
+* **Device Instantiation** and **Device Initialization** blocks. HAL (Hardware Abstraction Layer) uses these blocks to construct the system startup section.
+  The *Device Instantiation* block creates a device instance for each Time Scheduler device present in the system.
   The *Device Initialization* block performs initial setup and configuration of each Time Scheduler device present in the system.
 
-* The **Interrupt Service Routine (ISR)** interacts with the Time Scheduler device through the *Device Register Interface*.  
-  The ISR receives a pointer to the device instance (requiring service) as an input parameter.  
+* The **Interrupt Service Routine (ISR)** interacts with the Time Scheduler device through the *Device Register Interface*.
+  The ISR receives a pointer to the device instance (requiring service) as an input parameter.
   Each device instance includes a pointer to a period function table, which is provided by the user software for each Time Scheduler device present in the system.
 
 * The **Device Register Interface** provides access to the Time Scheduler device referenced by the corresponding device instance.
 
 # COMPONENT CONFIGURATION. #
 
-<Div style="float:center" markdown="1">
-![Time scheduler functional diagram](./media/time-scheduler-HW-architecture.png "Time scheduler functional diagram")
+The configuration of the **Time Scheduler** component is defined in three stages:
 
-figure 31.
+* During system creation using the **Platform Designer** tool in Intel® Quartus® Prime Software
+* During software development using the **Nios® II Embedded Design Suite (EDS)**
+* At runtime via the **Device Register Interface**, during system initialization and/or by user software
+
+The Time Scheduler component is packaged as an IP component for the Platform Designer tool. In the tool, it is referenced as `agstu_time_scheduler`. The file structure of the IP component is shown in Figure 6.
+
+<!-- <div style="float:center" markdown="1"> -->
+
+<!-- <a name="fig-ip-file-structure"></a> -->
+
+<!-- |![](./media/file-structure-ip.png "Time scheduler IP file structure")| -->
+<!-- |:---:| -->
+<!-- |*Figure 6. Time scheduler IP file structure.*| -->
+
+<!-- </div> -->
+
+<!-- <a name="fig-ip-file-structure"></a> -->
+
+![](./media/file-structure-ip.png "Time scheduler IP file structure")
+
+<caption>Figure 6. Time scheduler IP file structure.</br></br></br></br></caption>
+
 </div>
 
-<div style="float:center" markdown="1">
-<figure>
-  <img src="./media/time-scheduler-HW-architecture.png" alt="my alt text" />
-  <figcaption>Figur 6. Hardware architecture.</figcaption>
-</figure>
+</br>
+
+
+The default time schedule is defined during creation of the target system with Platform Designer tool. The following parameters  defined in this phase:
+
+* **Tick pulse period** – This parameter can only be configured in the Platform Designer tool.
+* **Number of periods** – This parameter can only be configured in the Platform Designer tool.
+* **Initial period limit values** for each period – These parameters can be configured both in the Platform Designer tool and at runtime.
+  
+<caption>
+Table 1. Component parameter configuration
+</caption>
+
+| Parameter            | Description                                                             | Configured in:             |
+|----------------------|-------------------------------------------------------------------------|----------------------------|
+| `tick_length`        | tick pulse period                                                        | Platform Designer          |
+| `counter_height`     | number of the periods in the system                                     | Platform Designer          |
+| `period_limit`[0:15] | period limits for period counters                                       | Platform Designer, Runtime |
+| period functions      | Period function pointers collected in a table (period function table);  provided to the driver by user software.| Preprocessor time, Runtime |
+|                      |                                                                         |                            |
+
+
+## Configuration during system creation with Platform Designer tool.
+
+
+An initial time schedule can be defined when the component is integrated into the target system. This is done in the **Parameters** window of the component. An example of the Parameters window is shown in [Figure 7](#fig-ip-parameter-window).
+
 </div>
 
-<div align="center">
-  <p><img src="./media/time-scheduler-SW-architecture.png" /></p>
-  <p>This is an image.</p>
+<a name="fig-ip-parameter-window"></a>
+![](./media/configuration.png "Time scheduler IP Parameters window")
+<caption>Figure 7. Time scheduler IP Parameters window.</br></br></br></caption>
+
 </div>
+
+The definitions of the parameters and the way they appear and behave in the Parameters window are specified in the `agstu_time_scheduler_sw.tcl` file. The `counter_height` and `tick_length` parameters are defined as integer values. Their definitions are similar and largely self-explanatory. As an example, the definition of `tick_length` is shown below:
+
+``` tcl
+add_parameter tick_length NATURAL 25000000 "tick pulse period length in system clock pulses"
+set_parameter_property tick_length DEFAULT_VALUE 25000000
+set_parameter_property tick_length DISPLAY_NAME tick_length
+set_parameter_property tick_length TYPE NATURAL
+set_parameter_property tick_length UNITS None
+set_parameter_property tick_length ALLOWED_RANGES 3:0x7fffffff
+set_parameter_property tick_length DESCRIPTION "tick pulse period length in system clock pulses"
+set_parameter_property tick_length HDL_PARAMETER true
+```
+
+The parameters `per0` .. `per15` represent initial value for the period limits. These parameters are assigned as constant values in the HDL design of the time scheduler component.
+
+The `HDL_PARAMETER` property ensures that the parameter value is assigned to the corresponding generic in the HDL design.
+
+After the parameters are set in the Parameters window, the following adjustments are performed:
+
+``` tcl
+proc post_elaboration {} {
+    set_module_assignment embeddedsw.CMacro.HEIGHT \
+	[get_parameter_value counter_height]
+
+    add_interface_port avalon_slave_0 addr address Input \
+	[log2ceil [expr {[get_parameter_value counter_height] + 1 + 4}]]
+
+}
+```
+
+By this procedure, the final value of counter_height is passed to the BSP (Board Support Package), and the bit width of the address input is adjusted to accommodate four 32-bit control registers and, plus one 32-bit register for each period limit.
+
+## Configuration with Nios® II Embedded Design Suite (EDS).
+
+### Component configuration in software driver.
+
+The software driver creates the following for each time scheduler component in the target system:
+
+  * An instance, which represents a record containing information about the corresponding component, including:
+    * base address
+	* IRQ line
+	* interrupt controller ID
+	* pointer to a period function table.
+  
+  * An initialization procedure.
+
+Both, the instance and the initialization procedure are implemented as macros. These macros are placed into the system initialization section during BSP generation. The pointer to a period function table sets to NULL during compilation of the BSP. If the user software does not provide a pointer to a period function table, the component remains inactive till the pointer is set at runtime.
+
+User software defines a period function table. It is created during compilation of the user software. During linking the pointer to the period function table is assigned to the component instance. The period function table can be changed at runtime by the user software. The software driver provides a preprocessor macro for defining a period function table.
+
+*(Continue here with your details about how preprocessor parameters are used in the Nios II EDS environment)*
