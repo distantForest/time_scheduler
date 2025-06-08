@@ -2,15 +2,19 @@
 
 The **Time Scheduler** component manages the execution of functions according to a predefined time schedule. The component's functionality is shown in [Figure 1](#rec-spec-figure_1).
 
-<div style="float:center" markdown="1">
+<!-- <div style="float:center" markdown="1"> -->
 
-<a name="rec-spec-figure_1"></a>
+<!-- <a name="rec-spec-figure_1"></a> -->
 
-|![](./media/functional-diagram.png "Time scheduler functional diagram")|
-|---|
-|*Figure 1. Time scheduler functional diagram.*|
+<!-- |![](./media/functional-diagram.png "Time scheduler functional diagram")| -->
+<!-- |---| -->
+<!-- |*Figure 1. Time scheduler functional diagram.*| -->
 
-</div>
+<!-- </div> -->
+ <figure>
+  <img src="./media/functional-diagram.png" alt="Functional diagram" style="width:100% float:center">
+  <figcaption>Figure.1 Time scheduler functional diagram.</figcaption>
+</figure> 
 
 The functionality of the component is described as follows:
 
@@ -27,35 +31,99 @@ The functionality of the component is described as follows:
 ## Hardware architecture.
 
 The hardware module architecture is shown on [Figure 2](#fig-hw-arc).
-<div style="float:center" markdown="1">
+<!-- <div style="float:center" markdown="1"> -->
 
-<a name="fig-hw-arc"></a>
 
-|![](./media/time-scheduler-HW-architecture.png "Time scheduler hardware architecture diagram")|
-|:---:|
-|*Figure 2. Time scheduler hardware module architecture.*|
+<!-- |![](./media/time-scheduler-HW-architecture.png "Time scheduler hardware architecture diagram")| -->
+<!-- |:---:| -->
+<!-- |*Figure 2. Time scheduler hardware module architecture.*| -->
 
-</div>
+<!-- </div> -->
+<!-- <a name="fig-hw-arc"></a> -->
+<figure>
+  <img src="./media/time-scheduler-HW-architecture.png" alt="Time scheduler hardware architecture diagram" style="float:center">
+  <figcaption>Figure.1 Time scheduler hardware architecture diagram.</figcaption>
+</figure> 
 
 The hardware module is connected to the Avalon bus and is controlled via a set of registers. The hardware module consists of three blocks. Each block has control/data registers connected to the Avalon Memory-Mapped interface. All the registers are available for the software running on the Nios II processor connected to the Avalon bus. The blocks that constitute the hardware module are:
 
 * **Timer function**. This block generates tick pulses. The tick pulse period is configured in the hardware synthesis phase. The tick function can be started and stopped via a register.
 * **Period counter**. This block contains a set of tick pulse counters. The number of counters is defined in the hardware synthesis phase. The period limits can be set individually in the hardware synthesis phase and via registers as well. The period counters feed the generated IRQ to the IRQ selector block.
 * **IRQ selector**. This block manages the individually generated period IRQs over a single interrupt line. The IRQ selector uses the period index as a vector. The IRQ selector expects an acknowledgment for IRQ taking and an acknowledgment for period function completion. The period index represents the priority of the period. Priority 0 is the highest. The lower the period index, the higher the priority.
+
+### Tick function.
+
+<!-- <div> -->
+
+<!-- <a name="fig-tick-function-block-symbol"></a> -->
+<!-- ![](./media/tick_function.png "Tick function block symbol") -->
+<!-- <figcaption>Figure 8. Tick function block symbol.</br></br></br></figcaption> -->
+
+<!-- </div> -->
+<figure>
+  <img src="./media/tick_function.png" alt="Tick function block symbol" style="float:center">
+  <figcaption>Figure.1 Tick function block symbol.</figcaption>
+</figure> 
+
+<!-- <div> -->
+
+<!-- <a name="fig-tick-function-architecture"></a> -->
+<!-- ![](./media/tick_function_rtl.png "Tick function architecture") -->
+<!-- <caption>Figure 8. Tick function architecture.</br></br></br></caption> -->
+
+<!-- </div> -->
+
+<figure>
+  <img src="./media/tick_function_rtl.png" alt="Tick function architecture" style="float:center">
+  <figcaption>Figure.1 Tick function architecture.</figcaption>
+</figure> 
+
+### IRQ selector.
+
+<!-- <div> -->
+
+<!-- <a name="fig-irq-selector-block-symbol"></a> -->
+<!-- ![](./media/irq_selector.png "IRQ selector block symbol.") -->
+<!-- <caption>Figure 9. IRQ selector block symbol.</br></br></br></caption> -->
+
+<!-- </div> -->
+
+<figure>
+  <img src="./media/irq_selector.png" alt="IRQ selector block symbol" style="float:center">
+  <figcaption>Figure.1 IRQ selector block symbol.</figcaption>
+</figure> 
+
+<!-- <div> -->
+
+<!-- <a name="fig-irq-selector-architecture"></a> -->
+<!-- ![](./media/irq_selector_rtl.png "IRQ selector architecture.") -->
+<!-- <caption>Figure 9. IRQ selector architecture.</br></br></br></caption> -->
+
+<!-- </div> -->
+
+<figure>
+  <img src="./media/irq_selector_rtl.png" alt="IRQ selector architecture" style="float:center">
+  <figcaption>Figure.1 IRQ selector architecture.</figcaption>
+</figure> 
   
 ## Software architecture ##
 
 The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 3](#fig-sw-arc).
 
-<div style="float:center" markdown="1">
+<!-- <div style="float:center" markdown="1"> -->
 
-<a name="fig-sw-arc"></a>
+<!-- <a name="fig-sw-arc"></a> -->
 
-|![](./media/time-scheduler-SW-architecture.png "Time scheduler software architecture diagram")|
-|:---:|
-|*Figure 3. Time scheduler software architecture.*|
+<!-- |![](./media/time-scheduler-SW-architecture.png "Time scheduler software architecture diagram")| -->
+<!-- |:---:| -->
+<!-- |*Figure 3. Time scheduler software architecture.*| -->
 
-</div>
+<!-- </div> -->
+
+<figure>
+  <img src="./media/time-scheduler-SW-architecture.png" alt="Time scheduler software architecture diagram" style="float:center">
+  <figcaption>Figure.1 Time scheduler hardware architecture diagram.</figcaption>
+</figure> 
 
 The device driver includes the following:
 
@@ -91,13 +159,16 @@ The Time Scheduler component is packaged as an IP component for the Platform Des
 
 <!-- <a name="fig-ip-file-structure"></a> -->
 
-![](./media/file-structure-ip.png "Time scheduler IP file structure")
+<!-- ![](./media/file-structure-ip.png "Time scheduler IP file structure") -->
 
-<caption>Figure 6. Time scheduler IP file structure.</br></br></br></br></caption>
+<!-- <caption>Figure 6. Time scheduler IP file structure.</br></br></br></br></caption> -->
 
-</div>
+<!-- </div> -->
 
-</br>
+<figure>
+  <img src="./media/file-structure-ip.png" alt="Time scheduler IP file structure" style="float:center">
+  <figcaption>Figure.1 Time scheduler scheduler IP file structure.</figcaption>
+</figure> 
 
 
 The default time schedule is defined during creation of the target system with Platform Designer tool. The following parameters  defined in this phase:
@@ -106,17 +177,50 @@ The default time schedule is defined during creation of the target system with P
 * **Number of periods** – This parameter can only be configured in the Platform Designer tool.
 * **Initial period limit values** for each period – These parameters can be configured both in the Platform Designer tool and at runtime.
   
+
+<!-- | Parameter            | Description                                                             | Configured in:             | -->
+<!-- |----------------------|-------------------------------------------------------------------------|----------------------------| -->
+<!-- | `tick_length`        | tick pulse period                                                        | Platform Designer          | -->
+<!-- | `counter_height`     | number of the periods in the system                                     | Platform Designer          | -->
+<!-- | `period_limit`[0:15] | period limits for period counters                                       | Platform Designer, Runtime | -->
+<!-- | period functions      | Period function pointers collected in a table (period function table);  provided to the driver by user software.| Preprocessor time, Runtime | -->
+<!-- |                      |                                                                         |                            | -->
+
+
+
+<table>
 <caption>
 Table 1. Component parameter configuration
 </caption>
-
-| Parameter            | Description                                                             | Configured in:             |
-|----------------------|-------------------------------------------------------------------------|----------------------------|
-| `tick_length`        | tick pulse period                                                        | Platform Designer          |
-| `counter_height`     | number of the periods in the system                                     | Platform Designer          |
-| `period_limit`[0:15] | period limits for period counters                                       | Platform Designer, Runtime |
-| period functions      | Period function pointers collected in a table (period function table);  provided to the driver by user software.| Preprocessor time, Runtime |
-|                      |                                                                         |                            |
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 59%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr><th>Parameter</th><th>Description</th><th>Configured in:</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tick_length</code></td><td>tick pulse period</td><td>Platform Designer</td></tr>
+<tr>
+<td><code>counter_height</code></td><td>number of the periods in the system</td><td>Platform Designer</td>
+</tr>
+<tr><td><code>period_limit</code>[0:15]</td><td>period limits for period counters</td><td>Platform Designer, Runtime</td>
+</tr>
+<tr>
+<td>period functions</td>
+<td>Period function pointers collected in a table (period function
+table); provided to the driver by user software.</td>
+<td>Preprocessor time, Runtime</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 
 
 ## Configuration during system creation with Platform Designer tool.
@@ -124,13 +228,18 @@ Table 1. Component parameter configuration
 
 An initial time schedule can be defined when the component is integrated into the target system. This is done in the **Parameters** window of the component. An example of the Parameters window is shown in [Figure 7](#fig-ip-parameter-window).
 
-</div>
+<!-- <div> -->
 
-<a name="fig-ip-parameter-window"></a>
-![](./media/configuration.png "Time scheduler IP Parameters window")
-<caption>Figure 7. Time scheduler IP Parameters window.</br></br></br></caption>
+<!-- <a name="fig-ip-parameter-window"></a> -->
+<!-- ![](./media/configuration.png "Time scheduler IP Parameters window") -->
+<!-- <caption>Figure 7. Time scheduler IP Parameters window.</br></br></br></caption> -->
 
-</div>
+<!-- </div> -->
+
+<figure>
+  <img src="./media/configuration.png" alt="Time scheduler IP Parameters window" style="float:center">
+  <figcaption>Figure.1 Time scheduler IP Parameters window.</figcaption>
+</figure> 
 
 The definitions of the parameters and the way they appear and behave in the Parameters window are specified in the `agstu_time_scheduler_sw.tcl` file. The `counter_height` and `tick_length` parameters are defined as integer values. Their definitions are similar and largely self-explanatory. As an example, the definition of `tick_length` is shown below:
 
