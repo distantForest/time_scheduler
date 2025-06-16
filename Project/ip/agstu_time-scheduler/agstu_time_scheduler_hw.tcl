@@ -45,44 +45,65 @@ add_fileset_file irq_selector.vhd VHDL PATH ./hdl/irq_selector.vhd
 
 
 # 
-# parameters
+# Parameters
 # 
-add_parameter counter_height INTEGER 4 ""
+add_parameter counter_height INTEGER 4 "The number of periods in the schedule"
+set_parameter_property counter_height GROUP ""
 set_parameter_property counter_height DEFAULT_VALUE 4
 set_parameter_property counter_height DISPLAY_NAME counter_height
 set_parameter_property counter_height WIDTH ""
-set_parameter_property counter_height TYPE INTEGER
+set_parameter_property counter_height TYPE POSITIVE
 set_parameter_property counter_height UNITS None
-set_parameter_property counter_height ALLOWED_RANGES 1:16
-set_parameter_property counter_height DESCRIPTION ""
+set_parameter_property counter_height ALLOWED_RANGES {
+    1:1 2:2 3:3 4:4 5:5 6:6 7:7 8:8
+    9:9 10:10 11:11 12:12 13:13
+    14:14 15:15 16:16}
+set_parameter_property counter_height DESCRIPTION "The number of periods in the schedule"
 set_parameter_property counter_height HDL_PARAMETER true
 
-# add_system_info "COUNTER_HEIGHT" [get_parameter_value counter_height]
 
 
-add_parameter tick_length INTEGER 25000000 "tick puls length in system clock pulses"
+add_parameter tick_length NATURAL 25000000 "tick pulse period length in system clock pulses"
 set_parameter_property tick_length DEFAULT_VALUE 25000000
 set_parameter_property tick_length DISPLAY_NAME tick_length
-set_parameter_property tick_length TYPE INTEGER
+set_parameter_property tick_length TYPE NATURAL
 set_parameter_property tick_length UNITS None
-set_parameter_property tick_length ALLOWED_RANGES -2147483648:2147483647
-set_parameter_property tick_length DESCRIPTION "tick puls length in system clock pulses"
+set_parameter_property tick_length ALLOWED_RANGES 3:0x7fffffff
+set_parameter_property tick_length DESCRIPTION "tick pulse period length in system clock pulses"
 set_parameter_property tick_length HDL_PARAMETER true
 
+#
+# Create 16 parameters (per0 to per15) for defining period lengths,
+# and make them invisible
+#
 for {set i 0} {$i < 16} {incr i} {
 set param_name ""
 
 append param_name "per" $i 
-    add_parameter $param_name INTEGER [expr $i + 1] "Period length for period $i"
+    add_parameter $param_name NATURAL [expr $i + 1] "Period length for period $i"
 
+    set_parameter_property $param_name DISPLAY_NAME [concat "period " $i]
     set_parameter_property $param_name VISIBLE false
     set_parameter_property $param_name HDL_PARAMETER true
-    set_parameter_property $param_name DEFAULT_VALUE [expr $i + 1] 
+    set_parameter_property $param_name DEFAULT_VALUE [expr $i + 1]
+    
+    # add the parameter to the "time schedule" display item
+    add_display_item "time schedule" $param_name PARAMETER ""
 }
+
+# 
+# display items
+# 
+add_display_item "time schedule"  counter_height PARAMETER ""
+add_display_item "tick generator" tick_length PARAMETER ""
+
 set_module_property VALIDATION_CALLBACK  adjust_height
 set_module_property ELABORATION_CALLBACK  post_elaboration
-
-
+#
+# Procedure: log2ceil
+# Description:
+#   Returns the bit length of the argument.
+#
 proc log2ceil {arg} {
     if {$arg <= 1} {
         return 0
@@ -102,18 +123,23 @@ proc log2ceil {arg} {
 proc post_elaboration {} {
     set_module_assignment embeddedsw.CMacro.HEIGHT \
 	[get_parameter_value counter_height]
-    # add_sw_property COUNTER_HEIGHT [get_parameter_value counter_height]
+
     add_interface_port avalon_slave_0 addr address Input \
 	[log2ceil [expr {[get_parameter_value counter_height] + 1 + 4}]]
-    # 2
 
 }
 
-
+#
+# Procedure: adjust_height
+# Description:
+#   Dynamically shows or hides a set of parameters (per0 to per15)
+#   based on the value of 'counter_height'. Makes per0 .. per(counter_height - 1)
+#   visible, and hides the rest.
+#
 proc adjust_height {} {
     set per_len [get_parameter_value counter_height]
 
-    if {$per_len > 0} {    
+    if {($per_len > 0) && ($per_len < 17)} {
 	for {set i 0} {$i < 16} {incr i} {
 	    set param_name ""
 	    if {$i < $per_len} {
@@ -126,10 +152,6 @@ proc adjust_height {} {
       	}
     }
 }
-# 
-# display items
-# 
-add_display_item "tick generator" tick_length PARAMETER ""
 
 
 # 

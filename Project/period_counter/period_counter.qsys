@@ -297,6 +297,22 @@
          type = "String";
       }
    }
+   element period_counter
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element period_counter
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
    element time_scheduler_0
    {
       datum _sortIndex

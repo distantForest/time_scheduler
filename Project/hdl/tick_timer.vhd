@@ -30,7 +30,7 @@ use ieee.numeric_std.all;
 entity tick_function is
   generic
     (
-      g_timer_limit : integer := 2 * 5 * 1000 * 1000
+      g_timer_limit : natural := 2 * 5 * 1000 * 1000
       --                         |2 * 100 ms  
       );
   port
