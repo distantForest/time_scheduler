@@ -11,10 +11,13 @@ The **Time Scheduler** component manages the execution of functions according to
 <!-- |*Figure 1. Time scheduler functional diagram.*| -->
 
 <!-- </div> -->
+
+  <a name="rec-spec-figure_1">
  <figure>
   <img src="./media/functional-diagram.png" alt="Functional diagram" style="width:100% float:center">
   <figcaption>Figure.1 Time scheduler functional diagram.</figcaption>
 </figure> 
+  </a>
 
 The functionality of the component is described as follows:
 
@@ -39,11 +42,14 @@ The hardware module architecture is shown on [Figure 2](#fig-hw-arc).
 <!-- |*Figure 2. Time scheduler hardware module architecture.*| -->
 
 <!-- </div> -->
+
 <!-- <a name="fig-hw-arc"></a> -->
+  <a name="fig-hw-arc">
 <figure>
-  <img src="./media/time-scheduler-HW-architecture.png" alt="Time scheduler hardware architecture diagram" style="float:center">
-  <figcaption>Figure.1 Time scheduler hardware architecture diagram.</figcaption>
+    <img src="./media/time-scheduler-HW-architecture.png" alt="Time scheduler hardware architecture diagram" style="float:center">
+    <figcaption>Figure.1 Time scheduler hardware architecture diagram.</figcaption>
 </figure> 
+  </a>
 
 The hardware module is connected to the Avalon bus and is controlled via a set of registers. The hardware module consists of three blocks. Each block has control/data registers connected to the Avalon Memory-Mapped interface. All the registers are available for the software running on the Nios II processor connected to the Avalon bus. The blocks that constitute the hardware module are:
 
@@ -60,10 +66,15 @@ The hardware module is connected to the Avalon bus and is controlled via a set o
 <!-- <figcaption>Figure 8. Tick function block symbol.</br></br></br></figcaption> -->
 
 <!-- </div> -->
+The `tick_function` block is defined in the file `tick_timer.vhd`. The tick function block symbol is shown in Figure 1.
+
 <figure>
   <img src="./media/tick_function.png" alt="Tick function block symbol" style="float:center">
   <figcaption>Figure.1 Tick function block symbol.</figcaption>
 </figure> 
+
+The tick function is based on a counter that counts system clock pulses up to the `tick_length` parameter. It holds its output high during the first half of the interval and low during the second half, forming a square wave with a period equal to `tick_length`.
+The Figure 11 shows the architecture of the tick function.
 
 <!-- <div> -->
 
@@ -78,8 +89,11 @@ The hardware module is connected to the Avalon bus and is controlled via a set o
   <figcaption>Figure.1 Tick function architecture.</figcaption>
 </figure> 
 
+For debugging purposes, the tick function outputs a current value of its internal counter.
+
 ### IRQ selector.
 
+The IRQ selector block transfers multiple IRQ requests from the period counters to the Nios II processor over a single IRQ line. The figure 12 shows the IRQ selector block symbol.
 <!-- <div> -->
 
 <!-- <a name="fig-irq-selector-block-symbol"></a> -->
@@ -90,8 +104,20 @@ The hardware module is connected to the Avalon bus and is controlled via a set o
 
 <figure>
   <img src="./media/irq_selector.png" alt="IRQ selector block symbol" style="float:center">
-  <figcaption>Figure.1 IRQ selector block symbol.</figcaption>
+  <figcaption>Figure 12. IRQ selector block symbol.</figcaption>
 </figure> 
+
+The input signals:
+
+* `clk`,`reset_n` - system clock and reset signals.
+* `irq_in_mx` - `std_logic_vector` of IRQs from the period counters. A bit in the `irq_in_mx` corresponds to its period counter. A bit in the vector is set to `1` when corresponding period counter reaches its limit. A bit in the vector is cleared to `0` when corresponding period function is completed.
+* `ack_in_mx` - acknowlege signals, indicating completion of a period function. Each bit corresponds to a period function.
+* `ack_in` - acknowlege signal, indicating that the interrupt is taken by the ISR and the IRQ line is free. The IRQ selector then begins to process the next interrupt according to its priority strategy.
+
+The output signals:
+
+* `p_irq_out` - output IRQ line to Nios II processor.
+* `vector_out` - interrupt `vector` as integer, showing the index of the period, being processed.
 
 <!-- <div> -->
 
@@ -105,7 +131,7 @@ The hardware module is connected to the Avalon bus and is controlled via a set o
   <img src="./media/irq_selector_rtl.png" alt="IRQ selector architecture" style="float:center">
   <figcaption>Figure.1 IRQ selector architecture.</figcaption>
 </figure> 
-  
+
 ## Software architecture ##
 
 The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 3](#fig-sw-arc).
@@ -136,7 +162,7 @@ The device driver includes the following:
   Each device instance includes a pointer to a period function table, which is provided by the user software for each Time Scheduler device present in the system.
 
 * The **Device Register Interface** provides access to the Time Scheduler device referenced by the corresponding device instance.
-
+	
 # COMPONENT CONFIGURATION. #
 
 The configuration of the **Time Scheduler** component is defined in three stages:
@@ -210,8 +236,7 @@ Table 1. Component parameter configuration
 </tr>
 <tr>
 <td>period functions</td>
-<td>Period function pointers collected in a table (period function
-table); provided to the driver by user software.</td>
+<td>Period function pointers collected in a table (period function table); provided to the driver by user software.</td>
 <td>Preprocessor time, Runtime</td>
 </tr>
 <tr>
@@ -255,6 +280,24 @@ set_parameter_property tick_length HDL_PARAMETER true
 ```
 
 The parameters `per0` .. `per15` represent initial value for the period limits. These parameters are assigned as constant values in the HDL design of the time scheduler component.
+
+The `counter_height` parameter is defined as a drop-down list as shown bellow:
+
+``` tcl
+add_parameter counter_height INTEGER 4 "The number of periods in the schedule"
+set_parameter_property counter_height GROUP ""
+set_parameter_property counter_height DEFAULT_VALUE 4
+set_parameter_property counter_height DISPLAY_NAME counter_height
+set_parameter_property counter_height WIDTH ""
+set_parameter_property counter_height TYPE POSITIVE
+set_parameter_property counter_height UNITS None
+set_parameter_property counter_height ALLOWED_RANGES {
+    1:1 2:2 3:3 4:4 5:5 6:6 7:7 8:8
+    9:9 10:10 11:11 12:12 13:13
+    14:14 15:15 16:16}
+set_parameter_property counter_height DESCRIPTION "The number of periods in the schedule"
+set_parameter_property counter_height HDL_PARAMETER true
+``` 
 
 The `HDL_PARAMETER` property ensures that the parameter value is assigned to the corresponding generic in the HDL design.
 
