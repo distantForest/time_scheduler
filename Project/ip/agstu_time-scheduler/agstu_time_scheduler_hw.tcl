@@ -54,7 +54,10 @@ set_parameter_property counter_height DISPLAY_NAME counter_height
 set_parameter_property counter_height WIDTH ""
 set_parameter_property counter_height TYPE POSITIVE
 set_parameter_property counter_height UNITS None
-set_parameter_property counter_height ALLOWED_RANGES 1:16
+set_parameter_property counter_height ALLOWED_RANGES {
+    1:1 2:2 3:3 4:4 5:5 6:6 7:7 8:8
+    9:9 10:10 11:11 12:12 13:13
+    14:14 15:15 16:16}
 set_parameter_property counter_height DESCRIPTION "The number of periods in the schedule"
 set_parameter_property counter_height HDL_PARAMETER true
 
