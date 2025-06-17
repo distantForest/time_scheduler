@@ -132,6 +132,25 @@ The output signals:
   <figcaption>Figure.1 IRQ selector architecture.</figcaption>
 </figure> 
 
+#### IRQ Prioritization and Preemption
+
+The IRQ selector block implements a simple strategy for prioritizing and preempting period IRQs. It begins processing when the IRQ line becomes free and new IRQs have arrived. Among them, it processes the one with the lowest period number, but only if that number is lower than any currently pending IRQ. By doing this, it preempts lower-priority pending IRQs.
+
+##### Step-by-step logic:
+
+1. Is IRQ line free?
+   - if yes, continue to next step.
+   - if no, exit.
+2. Check for newly arrived period IRQs.
+3. If there are no new IRQs, exit.
+4. If there are:
+   - Find the newly arrived IRQ with the lowest number.
+   - Compare this number to all pending IRQs.
+5. If the new IRQ's number is lower than any pending IRQ:
+   - Process this IRQ; exit
+6. Otherwise:
+   - Do not process the new IRQ; exit.
+
 ## Software architecture ##
 
 The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 3](#fig-sw-arc).
