@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-17
--- Last update: 2025-05-04
+-- Last update: 2025-06-20
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ architecture tick_top_rtl of tick_function is
 
   signal period_done : std_logic := '1';
 
-  constant t_period      : unsigned := to_unsigned(g_timer_limit, period_counter'length);
+  constant t_period      : unsigned := to_unsigned(g_timer_limit - 1, period_counter'length);
   constant t_pulse_width : unsigned := shift_right(t_period, 1);
 
   signal tick_local : std_logic := '0';  --std_logic;
@@ -57,15 +57,32 @@ architecture tick_top_rtl of tick_function is
 begin
 
   --
-  period_counter <= (others => '0') when (reset_n = '0') else
-                    period_counter_clk when rising_edge(clk);
+  -- period_counter <= (others => '0') when (reset_n = '0') else
+  --                   period_counter_clk when rising_edge(clk);
 
-  period_counter_clk <= (others => '0') when (reset_timer_n = '0') or (period_done = '1') else
-                        period_counter + 1 when counter_en = '1' else
-                        period_counter;
+  -- period_counter_clk <= (others => '0') when (reset_timer_n = '0') or (period_done = '1') else
+  --                       period_counter + 1 when counter_en = '1' else
+  --                       period_counter;
 
-  period_done <= '1' when (period_counter = t_period) else
-                 '0';
+  -- period_done <= '1' when (period_counter = t_period) else
+  --                '0';
+  process(clk, reset_n)
+  begin
+      if reset_n = '0' then
+        period_counter <= (others => '0');
+    elsif rising_edge(clk) then
+      if reset_timer_n = '0' or period_done = '1' then
+        period_counter <= (others => '0');
+      elsif counter_en = '1' then
+        period_counter <= period_counter + 1;
+      else
+        period_counter <= period_counter;
+      end if;
+    end if;
+  end process;
+
+period_done <= '1' when (period_counter = t_period) else
+                  '0';
   tick_local <= '1' when (period_counter < t_pulse_width) else
                 '0';
 
