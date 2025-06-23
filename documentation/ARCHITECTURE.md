@@ -401,4 +401,4 @@ Both, the instance and the initialization procedure are implemented as macros. T
 
 User software defines a period function table. It is created during compilation of the user software. During linking the pointer to the period function table is assigned to the component instance. The period function table can be changed at runtime by the user software. The software driver provides a preprocessor macro for defining a period function table.
 
-*(Continue here with your details about how preprocessor parameters are used in the Nios II EDS environment)*
+
