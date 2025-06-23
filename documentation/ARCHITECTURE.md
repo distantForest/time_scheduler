@@ -14,7 +14,7 @@ The **Time Scheduler** component manages the execution of functions according to
 
   <a name="rec-spec-figure_1">
  <figure>
-  <img src="./media/functional-diagram.png" alt="Functional diagram" style="width:100% float:center">
+  <img src="./media/functional-diagram.png" alt="Functional diagram" style="width:100%; float:center">
   <figcaption>Figure.1 Time scheduler functional diagram.</figcaption>
 </figure> 
   </a>
@@ -66,15 +66,16 @@ The hardware module is connected to the Avalon bus and is controlled via a set o
 <!-- <figcaption>Figure 8. Tick function block symbol.</br></br></br></figcaption> -->
 
 <!-- </div> -->
-The `tick_function` block is defined in the file `tick_timer.vhd`. The tick function block symbol is shown in Figure 1.
+The `tick_function` block is defined in the file `tick_timer.vhd`. The tick function block symbol is shown in [Figure 3](#fig-3-tick-symbol).
 
+<a name="fig-3-tick-symbol"></a>
 <figure>
   <img src="./media/tick_function.png" alt="Tick function block symbol" style="float:center">
   <figcaption>Figure.1 Tick function block symbol.</figcaption>
 </figure> 
 
 The tick function is based on a counter that counts system clock pulses up to the `tick_length` parameter. It holds its output high during the first half of the interval and low during the second half, forming a square wave with a period equal to `tick_length`.
-The Figure 11 shows the architecture of the tick function.
+[Figure 4](#fig-4-tick-arch) shows the architecture of the tick function.
 
 <!-- <div> -->
 
@@ -83,7 +84,7 @@ The Figure 11 shows the architecture of the tick function.
 <!-- <caption>Figure 8. Tick function architecture.</br></br></br></caption> -->
 
 <!-- </div> -->
-
+<a name="fig-4-tick-arch"></a>
 <figure>
   <img src="./media/tick_function_rtl.png" alt="Tick function architecture" style="float:center">
   <figcaption>Figure.1 Tick function architecture.</figcaption>
@@ -93,7 +94,7 @@ For debugging purposes, the tick function outputs a current value of its interna
 
 ### IRQ selector.
 
-The IRQ selector block transfers multiple IRQ requests from the period counters to the Nios II processor over a single IRQ line. The figure 12 shows the IRQ selector block symbol.
+The IRQ selector block transfers multiple IRQ requests from the period counters to the Nios II processor over a single IRQ line. The [Figure 5](#fig-5-irq-symbol) shows the IRQ selector block symbol.
 <!-- <div> -->
 
 <!-- <a name="fig-irq-selector-block-symbol"></a> -->
@@ -102,6 +103,7 @@ The IRQ selector block transfers multiple IRQ requests from the period counters 
 
 <!-- </div> -->
 
+<a name="fig-5-irq-symbol"></a>
 <figure>
   <img src="./media/irq_selector.png" alt="IRQ selector block symbol" style="float:center">
   <figcaption>Figure 12. IRQ selector block symbol.</figcaption>
@@ -118,6 +120,7 @@ The output signals:
 
 * `p_irq_out` - output IRQ line to Nios II processor.
 * `vector_out` - interrupt `vector` as integer, showing the index of the period, being processed.
+The architecture of the IRQ selector is shown in [Figure 6](#fig-6-irq-arch).
 
 <!-- <div> -->
 
@@ -126,11 +129,13 @@ The output signals:
 <!-- <caption>Figure 9. IRQ selector architecture.</br></br></br></caption> -->
 
 <!-- </div> -->
-
+<a name="fig-6-irq-arch"></a>
 <figure>
   <img src="./media/irq_selector_rtl.png" alt="IRQ selector architecture" style="float:center">
   <figcaption>Figure.1 IRQ selector architecture.</figcaption>
 </figure> 
+
+The Platform Designer synthesises a IRQ selector block according to the `counter_hight` parameter. Therefore, the dimensions of the registers and the connecting logic can vary.
 
 #### IRQ Prioritization and Preemption
 
@@ -150,24 +155,59 @@ The IRQ selector block implements a simple strategy for prioritizing and preempt
    - Process this IRQ; exit
 6. Otherwise:
    - Do not process the new IRQ; exit.
+   
+### Period Counter.
+
+The Period Counter block takes the `tick_front` signal as input and counts the ticks in a number of counters. The count limits for the counters are provided by the signal `period_length`. When a counter reaches its corresponded limit it sets a bit (according to the counter number) in the `p_counter_irq` register.
+
+The [Figure 7](#fig-7-counter-symbol) shows the block symbol of the Period Counter block. 
+
+<a name="fig-7-counter-symbol">
+<figure>
+  <img src="./media/counter_module_symbol.png" alt="Period Counter block symbol" style="float:center">
+  <figcaption>Figure.1 Period Counter block symbol.</figcaption>
+</figure> 
+</a>
+
+The architecture of the Period Counter block is shown in the Figure 1.
+
+<a name="fig-8">
+<figure>
+  <img src="./media/counter_module.png" alt="Period Counter architecture diagram" style="float:center">
+  <figcaption>Figure.1 Period Counter architecture diagram.</figcaption>
+</figure> 
+</a>
+
+The Period Counter block is synthesised by the Platform Designer, therefore the bit width of the signals and the registers will be changed according to the `counter_height` parameter.
+
+### Top-level module
+
+The top-level module forms the time scheduler device ready to connect to Avalon bus and Nios II processor. The block symbol of the module is shown on the figure 9. 
+
+<a name="fig-9">
+<figure>
+  <img src="./media/top_level_module.png" alt="Top-level module block symbol" style="float:center">
+  <figcaption>Figure 9. Top-level module block symbol.</figcaption>
+</figure> 
+</a>
+
+Besides the blocks:
+  * Period counter,
+  * IRQ selector,
+  * Tick timer
+the Top-level module includes:
+  * register interface logic,
+  * the IRQ processing with the IRQ acknowledge logic,
+  * the `counter_limits` registers.
 
 ## Software architecture ##
 
 The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 3](#fig-sw-arc).
 
-<!-- <div style="float:center" markdown="1"> -->
-
-<!-- <a name="fig-sw-arc"></a> -->
-
-<!-- |![](./media/time-scheduler-SW-architecture.png "Time scheduler software architecture diagram")| -->
-<!-- |:---:| -->
-<!-- |*Figure 3. Time scheduler software architecture.*| -->
-
-<!-- </div> -->
 
 <figure>
   <img src="./media/time-scheduler-SW-architecture.png" alt="Time scheduler software architecture diagram" style="float:center">
-  <figcaption>Figure.1 Time scheduler hardware architecture diagram.</figcaption>
+  <figcaption>Figure.3 Time scheduler hardware architecture diagram.</figcaption>
 </figure> 
 
 The device driver includes the following:
@@ -175,12 +215,17 @@ The device driver includes the following:
 * **Device Instantiation** and **Device Initialization** blocks. HAL (Hardware Abstraction Layer) uses these blocks to construct the system startup section.
   The *Device Instantiation* block creates a device instance for each Time Scheduler device present in the system.
   The *Device Initialization* block performs initial setup and configuration of each Time Scheduler device present in the system.
-
+These blocks are formed as preprocessor macros. 
 * The **Interrupt Service Routine (ISR)** interacts with the Time Scheduler device through the *Device Register Interface*.
   The ISR receives a pointer to the device instance (requiring service) as an input parameter.
-  Each device instance includes a pointer to a period function table, which is provided by the user software for each Time Scheduler device present in the system.
+  Each device instance includes a pointer to a period function table, which is provided by the user software for each Time Scheduler device present in the system. The ISR consist of three sections:
+  1. Entry section. This section begins in interrupts disabled mode. The ISR reads and saves the `vector` from the Time Scheduler component, saves the device instance in its stack. Then, the ISR enables interrupts from the Time Scheduler component which it serves (according the saved device instance).
+  2. The ISR body section. The Period Function Table is checked if it is not empty. If the table contains a pointer to a period function, the ISR calls it.
+  3. The ISR exit section. By the period function return (called in the ISR body section) the ISR re-disables interrupts and returns to the HAL.
 
-* The **Device Register Interface** provides access to the Time Scheduler device referenced by the corresponding device instance.
+* The **Device Register Interface** provides access to the Time Scheduler device referenced by the corresponding device instance. It is represented as macros for reading and writing the registers of the Time Scheduler component.
+
+A User needs to provide a Period Function Table. In case the period function table is not defined the Time Scheduler component remains inactive. The period function table can be defined at compile time by a macro, that the device driver provided. 
 	
 # COMPONENT CONFIGURATION. #
 
@@ -324,6 +369,9 @@ After the parameters are set in the Parameters window, the following adjustments
 
 ``` tcl
 proc post_elaboration {} {
+    set_module_assignment embeddedsw.CMacro.TICK_LENGTH \
+	[get_parameter_value tick_length]
+
     set_module_assignment embeddedsw.CMacro.HEIGHT \
 	[get_parameter_value counter_height]
 
@@ -333,7 +381,7 @@ proc post_elaboration {} {
 }
 ```
 
-By this procedure, the final value of counter_height is passed to the BSP (Board Support Package), and the bit width of the address input is adjusted to accommodate four 32-bit control registers and, plus one 32-bit register for each period limit.
+By this procedure, the final values of `counter_height` and `tick_length`are passed to the BSP (Board Support Package), and the bit width of the address input is adjusted to accommodate four 32-bit control registers and, plus one 32-bit register for each period limit.
 
 ## Configuration with Nios® II Embedded Design Suite (EDS).
 
