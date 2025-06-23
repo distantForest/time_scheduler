@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-04-06
+-- Last update: 2025-06-21
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -22,58 +22,59 @@
 -------------------------------------------------------------------------------
 
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD.all;
 library work;
 
 package pack_period is
-function log2ceil(
-	arg : natural )
-	return natural;
-	end package pack_period;
-	
+  function log2ceil(
+    arg : natural)
+    return natural;
+end package pack_period;
+
 package body pack_period is
 
-function log2ceil(arg : natural) return natural is
-    variable tmp : positive     := 1;
-    variable log : natural      := 0;
-begin
+  function log2ceil(arg : natural) return natural is
+    variable tmp : positive := 1;
+    variable log : natural  := 0;
+  begin
     if arg = 1 then return 0; end if;
     while arg > tmp loop
-        tmp := tmp * 2;
-        log := log + 1;
+      tmp := tmp * 2;
+      log := log + 1;
     end loop;
     return log;
-end function;
+  end function;
 end package body pack_period;
 
-use work.pack_period.ALL;
+use work.pack_period.all;
+use work.counter_types.all;
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.NUMERIC_STD.ALL;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.NUMERIC_STD.all;
 
 
 entity period_controller is
   generic (
     counter_height : integer := 4;      -- number of periods
-    tick_length    : integer := 25 * 1000 * 1000;   -- tick length
-    per0           : integer := 1;
-    per1           : integer := 2;
-    per2           : integer := 3;
-    per3           : integer := 4;
-    per4           : integer := 5;
-    per5           : integer := 6;
-    per6           : integer := 7;
-    per7           : integer := 8;
-    per8           : integer := 9;
-    per9           : integer := 10;
-    per10          : integer := 11;
-    per11          : integer := 12;
-    per12          : integer := 13;
-    per13          : integer := 14;
-    per14          : integer := 15;
-    per15          : integer := 16
-  );
+    tick_length    : integer := 25 * 1000 * 1000;  -- tick length
+    per0           : integer := 2;
+    per1           : integer := 3;
+    per2           : integer := 4;
+    per3           : integer := 5;
+    per4           : integer := 6;
+    per5           : integer := 7;
+    per6           : integer := 8;
+    per7           : integer := 9;
+    per8           : integer := 10;
+    per9           : integer := 11;
+    per10          : integer := 12;
+    per11          : integer := 13;
+    per12          : integer := 14;
+    per13          : integer := 15;
+    per14          : integer := 16;
+    per15          : integer := 17
+    );
   port (
     clk        : in  std_logic;         -- system clock
     reset_n    : in  std_logic;         -- system reset
@@ -85,10 +86,24 @@ entity period_controller is
     din        : in  std_logic_vector(31 downto 0);
     dout       : out std_logic_vector(31 downto 0)
   );
+  subtype p_index_range is natural range 0 to counter_height - 1;
+  subtype p_bit_range is unsigned (31 downto 0);
+  subtype p_addr_range is unsigned (addr'length - 1 downto 0);
 end entity period_controller;
 
 architecture count_ticks_rtl of period_controller is
-
+  
+  component counter_module is
+    generic (
+      counter_height : natural);
+    port (
+      tick_front    : in  std_logic;
+      reset_n       : in  std_logic;
+      clk           : in  std_logic;
+      period_length : in  counter_array(counter_height - 1 downto 0);
+      p_counter_irq : out std_logic_vector(counter_height -1 downto 0));
+  end component counter_module;
+  
   component tick_function is
     generic (
       g_timer_limit : integer);
@@ -117,41 +132,41 @@ architecture count_ticks_rtl of period_controller is
       );
   end component irq_selector;
 
-  subtype p_index_range is natural range 0 to counter_height - 1;
-  type period_array is array (p_index_range) of natural;      
-  type integer_array is array (natural range 0 to 15) of natural;
-  signal period_counters : period_array;
-  signal period_length   : period_array;
-  signal period_index : p_index_range;
-  signal p_vector : p_index_range; -- natural range 0 to counter_height - 1;
-  
-  constant p_irq_enable_reg_addr : natural := 0;
-  constant p_irq_ack_reg_addr : natural := 1;
-  constant p_irq_vector_reg_addr : natural := 2;
-  constant p_irq_cs_reg_addr : natural := 3;
-  constant p_limits_addr : natural := 4;
+
+  type period_array is array (p_index_range) of unsigned (31 downto 0);  --integer;      
+  type integer_array is array (natural range 0 to 15) of unsigned (31 downto 0);  --integer;
+  -- signal period_counters : period_array;
+  signal period_length   : counter_array(counter_height - 1 downto 0);
+  signal period_index    : p_index_range;
+  signal p_vector        : p_index_range;  -- natural range 0 to counter_height - 1;
+
+  constant p_irq_enable_reg_addr : p_addr_range := to_unsigned(0, p_addr_range'length);
+  constant p_irq_ack_reg_addr    : p_addr_range := to_unsigned(1, p_addr_range'length);
+  constant p_irq_vector_reg_addr : p_addr_range := to_unsigned(2, p_addr_range'length);
+  constant p_irq_cs_reg_addr     : p_addr_range := to_unsigned(3, p_addr_range'length);
+  constant p_limits_addr         : p_addr_range := to_unsigned(4, p_addr_range'length);
   constant period_init : integer_array := (  -- fill 
 -- constants period length
-    per0,
-    per1,
-    per2,
-    per3,
-    per4,
-    per5,
-    per6,
-    per7,
-    per8,
-    per9,
-    per10,
-    per11,
-    per12,
-    per13,
-    per14,
-    per15
+    to_unsigned(per0 - 1, p_bit_range'length),
+    to_unsigned(per1 - 1, p_bit_range'length),
+    to_unsigned(per2 - 1, p_bit_range'length),
+    to_unsigned(per3 - 1, p_bit_range'length),
+    to_unsigned(per4 - 1, p_bit_range'length),
+    to_unsigned(per5 - 1, p_bit_range'length),
+    to_unsigned(per6 - 1, p_bit_range'length),
+    to_unsigned(per7 - 1, p_bit_range'length),
+    to_unsigned(per8 - 1, p_bit_range'length),
+    to_unsigned(per9 - 1, p_bit_range'length),
+    to_unsigned(per10 - 1, p_bit_range'length),
+    to_unsigned(per11 - 1, p_bit_range'length),
+    to_unsigned(per12 - 1, p_bit_range'length),
+    to_unsigned(per13 - 1, p_bit_range'length),
+    to_unsigned(per14 - 1, p_bit_range'length),
+    to_unsigned(per15 - 1, p_bit_range'length)
     );
   signal counter_p0                      : integer                                       := 0;
   signal timer_data                      : std_logic_vector(31 downto 0);
-  signal tick, tick_front, tick_ack, p0b : std_logic;
+  signal tick, tick_front, tick_ack      : std_logic;
   signal p0_counter_irq, p0_irq          : std_logic                                     := '0';  --IRQ channel 0
   signal p_counter_irq, p_irq, p_irq_ack : std_logic_vector(counter_height - 1 downto 0) := (others => '0');
 
@@ -160,16 +175,27 @@ architecture count_ticks_rtl of period_controller is
   signal p_irq_vector_reg     : std_logic_vector(31 downto 0);
   signal p_irq_ack_gl         : std_logic;
 
-  signal read_irq_enable_reg : std_logic;
-  signal read_irq_vector_reg  : std_logic;
-  
+  signal read_irq_enable_reg   : std_logic;
+  signal read_irq_vector_reg   : std_logic;
+  signal read_period_limit_reg : std_logic;
+
   signal write_regs : std_logic;
   
   signal p_counter_run : std_logic := '0';
 
 
 begin  --architecture count_ticks
-
+  
+  counter_module_1: entity work.counter_module
+    generic map (
+      counter_height => counter_height)
+    port map (
+      tick_front    => tick_front,
+      reset_n       => reset_n,
+      clk           => clk,
+      period_length => period_length,
+      p_counter_irq => p_counter_irq);
+  
   -- instance "tick_function_1"
   tick_function_1 : entity work.tick_function
     generic map (
@@ -195,14 +221,18 @@ begin  --architecture count_ticks
       vector_out => p_vector);
 
   -- tick positive front extraction
-  front_extraction : process (tick, tick_ack, reset_n)
+  front_extraction : process (clk, reset_n)
   begin
     if reset_n = '0' then
       tick_front <= '0';
-    elsif tick_ack = '1' then
-      tick_front <= '0';
-    elsif rising_edge(tick) then
-      tick_front <= '1';
+      tick_ack   <= '0';
+    elsif rising_edge(clk) then
+      if tick_ack = '0' and tick = '1' then
+        tick_front <= '1';
+      else
+        tick_front <= '0';
+      end if;
+      tick_ack <= tick;
     end if;
   end process front_extraction;
   
@@ -225,17 +255,12 @@ begin  --architecture count_ticks
       p_irq_ack    <= (others => '0');
       p_irq_ack_gl <= '0';
       if write_regs = '1' then
-        case to_integer(unsigned(addr)) is
+          case unsigned(addr) is
 
           -- write control status register
           when p_irq_cs_reg_addr =>
             p_counter_run <= din(0);
 
-          -- write period limits
-          when p_limits_addr to (p_limits_addr + counter_height) =>
-            if p_counter_run = '0' then
-              period_length(to_integer(unsigned(addr)) - p_limits_addr) <= to_integer(unsigned(din));
-            end if;
 
           -- write irq enable register
           when p_irq_enable_reg_addr =>
@@ -244,7 +269,7 @@ begin  --architecture count_ticks
           -- write irq acknowlege 
           when p_irq_ack_reg_addr =>
             check_ack :
-            for i in period_counters'range loop
+            for i in period_length'range loop
               if din(i) = '1' then
                 p_irq_ack(i) <= '1';  -- give positive pulse one clk in length
               end if;
@@ -256,41 +281,17 @@ begin  --architecture count_ticks
             p_irq_vector_reg <= din;
 
           when others =>
-            null;
-        end case;
-      end if;
-    end if;
-  end process write_registers;
-      
-  -- count ticks
-  count_ticks : process (clk, reset_n)
-
-  begin
-    if reset_n = '0' then
-      tick_ack        <= '0';
-      period_counters <= (others => 0);
-      p_counter_irq   <= (others => '0');
-    elsif rising_edge(clk) then
-      tick_ack      <= '0';
-      p_counter_irq <= (others => '0');
-      if tick_front = '1' then
-        tick_ack <= '1';
-        -- update counters
-        update_counters :
-        for i in period_counters'range loop
-          if period_counters(i) >= period_length(i) then  --issue irq
-            period_counters(i) <= 0;
-            p_counter_irq(i)   <= '1';
-          else
-            period_counters(i) <= period_counters(i) + 1;
+          -- write period limits
+          if (unsigned(addr) > p_limits_addr) and (unsigned(addr) < (p_limits_addr + counter_height)) then
+            if p_counter_run = '0' then
+              period_length(to_integer(unsigned(addr)) - to_integer(p_limits_addr)) <= unsigned(din);
+            end if;
           end if;
-        end loop update_counters;
-      else
-        tick_ack <= '0';
-      end if;
+          null;
+      end case;
     end if;
-
-  end process count_ticks;
+  end if;
+end process write_registers;
 
   -- manage interrupt request
   manage_irq : process(clk, reset_n)
@@ -300,7 +301,7 @@ begin  --architecture count_ticks
       p_irq <= (others => '0');
     elsif rising_edge(clk) then
       check_irq :
-      for i in period_counters'range loop
+      for i in p_index_range loop
         if (p_irq_enable_reg(i) = '1') then
           if (p_counter_irq(i) = '1') then
             p_irq(i) <= '1';
@@ -317,15 +318,22 @@ begin  --architecture count_ticks
   end process manage_irq;
 
   --avalon bus read interface
-  read_irq_enable_reg <= '1' when (cs_n = '0' and read_n = '0' and
-                                   to_integer(unsigned(addr)) = p_irq_enable_reg_addr) else
-                          '0';
-  
-  read_irq_vector_reg <= '1' when (cs_n = '0' and read_n = '0' and
-                                   to_integer(unsigned(addr)) = p_irq_vector_reg_addr) else
+  read_irq_enable_reg <= '1' when ((cs_n = '0') and (read_n = '0') and
+                                   (unsigned(addr) = p_irq_enable_reg_addr)) else
                          '0';
+
+  read_irq_vector_reg <= '1' when ((cs_n = '0') and (read_n = '0') and
+                                   (unsigned(addr) = p_irq_vector_reg_addr)) else
+                         '0';
+  read_period_limit_reg <= '1' when ((cs_n = '0') and (read_n = '0') and
+                                     (unsigned(addr) >= p_limits_addr) and
+                                     (unsigned(addr) < (p_limits_addr + counter_height))) else
+                           '0';
+
   dout <= p_irq_enable_reg when read_irq_enable_reg = '1' else
           std_logic_vector(to_unsigned(p_vector, dout'length)) when read_irq_vector_reg = '1' else
+          std_logic_vector(period_length(to_integer(unsigned(addr)) -
+                                         to_integer(p_limits_addr))) when read_period_limit_reg = '1' else
           (others => '0');
 
 end architecture count_ticks_rtl;
