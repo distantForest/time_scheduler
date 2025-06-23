@@ -7,7 +7,7 @@ The Time Scheduler component is verified by simulating its behaviour with ModelS
   * IRQ processing
   * Interaction with ISR.
 
-For the simulation tests the Time Scheduler component was generated with following target parameters shown in the table 2.
+For the simulation tests the Time Scheduler component was generated with following target parameters shown in the table 3.
 
 <!-- <caption> -->
 <!-- Table 2: Target Test Configuration Parameters for the Time Scheduler Component -->
@@ -23,7 +23,7 @@ For the simulation tests the Time Scheduler component was generated with followi
 
 <table>
 <caption>
-Table 2: Target Test Configuration Parameters for the Time Scheduler Component
+Table 3. Target Test Configuration Parameters for the Time Scheduler Component
 </caption>
 <colgroup>
 <col style="width: 56%" />
@@ -67,13 +67,13 @@ ticks</td>
 ## Tick generation verification.
 
 
-The time diagram from the tick generation verification is shown in [figure 1](#fig-1-tick-generation-verification).
+The time diagram from the tick generation verification is shown in [figure 13](#fig-1-tick-generation-verification).
 The only parameter checked in this test is `tick_length`.
 
 <a name="fig-1-tick-generation-verification">
 <figure>
   <img src="./media/tick_generation-verification.png" alt="Period Counter block symbol" style="float:center">
-  <figcaption>Figure 1. Period Counter block symbol.</figcaption>
+  <figcaption>Figure 13. Period Counter block symbol.</figcaption>
 </figure> 
 </a>
 
@@ -85,7 +85,7 @@ The test results are approved.
 
 ## Period counting verification.
 
-The time diagram for the period counting verification is shown in figure 2. The functionality verified in the test:
+The time diagram for the period counting verification is shown in figure 14. The functionality verified in the test:
 
   * The period counters count each pulse of the `tick_front` signal.
   * When a counter reaches its limit, it is reset and and begins counting from 0.
@@ -94,7 +94,7 @@ The time diagram for the period counting verification is shown in figure 2. The 
 <a name="fig-2-period-counting-verification">
 <figure>
   <img src="./media/period_counting.png" alt="Period Counter block symbol" style="float:center">
-  <figcaption>Figure 2. Period Counting verification.</figcaption>
+  <figcaption>Figure 14. Period Counting verification.</figcaption>
 </figure> 
 </a>
 
@@ -110,12 +110,12 @@ The test results are approved.
 
 ## IRQ Processing verification.
 
-The IRQ processing simulation is shown on figure 3. This diagram shows the functioning of the `irq_selector` block. Pulses from the `p_counter_irq` signal build a positive front on the `irq_in_mx` lines. Pulses from the `p_irq_ack` signal build a negative front of the `irq_in_mx` lines. The `p_irq_ack_` signal comes from software period functions via the register interface. The `p0_irq_out` signal is the IRQ line to the Nios II processor. The `vector_out` represents the index of the `irq_in_mx` line being processed. It is readable via the register interface. Writing to the vector register gives the `ack_in` signal. It is an acknowledge signal from ISR, indicating that the ISR can be interrupted and the IRQ line is free. 
+The IRQ processing simulation is shown on figure 15. This diagram shows the functioning of the `irq_selector` block. Pulses from the `p_counter_irq` signal build a positive front on the `irq_in_mx` lines. Pulses from the `p_irq_ack` signal build a negative front of the `irq_in_mx` lines. The `p_irq_ack_` signal comes from software period functions via the register interface. The `p0_irq_out` signal is the IRQ line to the Nios II processor. The `vector_out` represents the index of the `irq_in_mx` line being processed. It is readable via the register interface. Writing to the vector register gives the `ack_in` signal. It is an acknowledge signal from ISR, indicating that the ISR can be interrupted and the IRQ line is free. 
 
 <a name="fig-3-irq-processing">
 <figure>
   <img src="./media/irq_processing.png" alt="Period Counter block symbol" style="float:center">
-  <figcaption>Figure 3. IRQ Processing verification.</figcaption>
+  <figcaption>Figure 15. IRQ Processing verification.</figcaption>
 </figure> 
 </a>
 
@@ -125,12 +125,12 @@ The test results are approved.
 
 ## Interaction with ISR verification.
 
-The Interaction with ISR is shown in figure 4. An ISR and a time scheduler device on an Avalon bus must coordinate their actions for the time schedule to be executed as defined. The ISR must give an acknowledge after reading of the vector, and the second time after the finishing of a period function.
+The Interaction with ISR is shown in figure 16. An ISR and a time scheduler device on an Avalon bus must coordinate their actions for the time schedule to be executed as defined. The ISR must give an acknowledge after reading of the vector, and the second time after the finishing of a period function.
 
 <a name="fig-4-isr-interaction">
 <figure>
   <img src="./media/isr_interaction.png" alt="Period Counter block symbol" style="float:center">
-  <figcaption>Figure 4. ISR interaction verification.</figcaption>
+  <figcaption>Figure 16. ISR interaction verification.</figcaption>
 </figure> 
 </a>
 
@@ -159,7 +159,7 @@ The simulation results are summarised in the following table.
 
 <table>
 <caption>
-Table 1. Test results.
+Table 4. Test results.
 </caption>
 <colgroup>
 <col style="width: 2%" />

@@ -15,7 +15,7 @@ The **Time Scheduler** component manages the execution of functions according to
   <a name="rec-spec-figure_1">
  <figure>
   <img src="./media/functional-diagram.png" alt="Functional diagram" style="width:100%; float:center">
-  <figcaption>Figure.1 Time scheduler functional diagram.</figcaption>
+  <figcaption>Figure 1. Time scheduler functional diagram.</figcaption>
 </figure> 
   </a>
 
@@ -47,7 +47,7 @@ The hardware module architecture is shown on [Figure 2](#fig-hw-arc).
   <a name="fig-hw-arc">
 <figure>
     <img src="./media/time-scheduler-HW-architecture.png" alt="Time scheduler hardware architecture diagram" style="float:center">
-    <figcaption>Figure.1 Time scheduler hardware architecture diagram.</figcaption>
+    <figcaption>Figure 2. Time scheduler hardware architecture diagram.</figcaption>
 </figure> 
   </a>
 
@@ -71,7 +71,7 @@ The `tick_function` block is defined in the file `tick_timer.vhd`. The tick func
 <a name="fig-3-tick-symbol"></a>
 <figure>
   <img src="./media/tick_function.png" alt="Tick function block symbol" style="float:center">
-  <figcaption>Figure.1 Tick function block symbol.</figcaption>
+  <figcaption>Figure 3. Tick function block symbol.</figcaption>
 </figure> 
 
 The tick function is based on a counter that counts system clock pulses up to the `tick_length` parameter. It holds its output high during the first half of the interval and low during the second half, forming a square wave with a period equal to `tick_length`.
@@ -87,7 +87,7 @@ The tick function is based on a counter that counts system clock pulses up to th
 <a name="fig-4-tick-arch"></a>
 <figure>
   <img src="./media/tick_function_rtl.png" alt="Tick function architecture" style="float:center">
-  <figcaption>Figure.1 Tick function architecture.</figcaption>
+  <figcaption>Figure 4. Tick function architecture.</figcaption>
 </figure> 
 
 For debugging purposes, the tick function outputs a current value of its internal counter.
@@ -106,7 +106,7 @@ The IRQ selector block transfers multiple IRQ requests from the period counters 
 <a name="fig-5-irq-symbol"></a>
 <figure>
   <img src="./media/irq_selector.png" alt="IRQ selector block symbol" style="float:center">
-  <figcaption>Figure 12. IRQ selector block symbol.</figcaption>
+  <figcaption>Figure 5. IRQ selector block symbol.</figcaption>
 </figure> 
 
 The input signals:
@@ -132,7 +132,7 @@ The architecture of the IRQ selector is shown in [Figure 6](#fig-6-irq-arch).
 <a name="fig-6-irq-arch"></a>
 <figure>
   <img src="./media/irq_selector_rtl.png" alt="IRQ selector architecture" style="float:center">
-  <figcaption>Figure.1 IRQ selector architecture.</figcaption>
+  <figcaption>Figure 6. IRQ selector architecture.</figcaption>
 </figure> 
 
 The Platform Designer synthesises a IRQ selector block according to the `counter_hight` parameter. Therefore, the dimensions of the registers and the connecting logic can vary.
@@ -165,7 +165,7 @@ The [Figure 7](#fig-7-counter-symbol) shows the block symbol of the Period Count
 <a name="fig-7-counter-symbol">
 <figure>
   <img src="./media/counter_module_symbol.png" alt="Period Counter block symbol" style="float:center">
-  <figcaption>Figure.1 Period Counter block symbol.</figcaption>
+  <figcaption>Figure 7. Period Counter block symbol.</figcaption>
 </figure> 
 </a>
 
@@ -174,7 +174,7 @@ The architecture of the Period Counter block is shown in the Figure 1.
 <a name="fig-8">
 <figure>
   <img src="./media/counter_module.png" alt="Period Counter architecture diagram" style="float:center">
-  <figcaption>Figure.1 Period Counter architecture diagram.</figcaption>
+  <figcaption>Figure 8. Period Counter architecture diagram.</figcaption>
 </figure> 
 </a>
 
@@ -202,12 +202,12 @@ the Top-level module includes:
 
 ## Software architecture ##
 
-The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 3](#fig-sw-arc).
+The software driver of the **Time Scheduler** component is designed to be included in a **Board Support Package** (BSP). The component's software architecture is shown in [Figure 10](#fig-sw-arc).
 
 
 <figure>
   <img src="./media/time-scheduler-SW-architecture.png" alt="Time scheduler software architecture diagram" style="float:center">
-  <figcaption>Figure.3 Time scheduler hardware architecture diagram.</figcaption>
+  <figcaption>Figure 10. Time scheduler hardware architecture diagram.</figcaption>
 </figure> 
 
 The device driver includes the following:
@@ -235,7 +235,7 @@ The configuration of the **Time Scheduler** component is defined in three stages
 * During software development using the **Nios® II Embedded Design Suite (EDS)**
 * At runtime via the **Device Register Interface**, during system initialization and/or by user software
 
-The Time Scheduler component is packaged as an IP component for the Platform Designer tool. In the tool, it is referenced as `agstu_time_scheduler`. The file structure of the IP component is shown in Figure 6.
+The Time Scheduler component is packaged as an IP component for the Platform Designer tool. In the tool, it is referenced as `agstu_time_scheduler`. The file structure of the IP component is shown in Figure 11.
 
 <!-- <div style="float:center" markdown="1"> -->
 
@@ -257,7 +257,7 @@ The Time Scheduler component is packaged as an IP component for the Platform Des
 
 <figure>
   <img src="./media/file-structure-ip.png" alt="Time scheduler IP file structure" style="float:center">
-  <figcaption>Figure.1 Time scheduler scheduler IP file structure.</figcaption>
+  <figcaption>Figure 11. Time scheduler scheduler IP file structure.</figcaption>
 </figure> 
 
 
@@ -266,6 +266,8 @@ The default time schedule is defined during creation of the target system with P
 * **Tick pulse period** – This parameter can only be configured in the Platform Designer tool.
 * **Number of periods** – This parameter can only be configured in the Platform Designer tool.
 * **Initial period limit values** for each period – These parameters can be configured both in the Platform Designer tool and at runtime.
+
+The configuration scheme is shown in Table 2.
   
 
 <!-- | Parameter            | Description                                                             | Configured in:             | -->
@@ -280,7 +282,7 @@ The default time schedule is defined during creation of the target system with P
 
 <table>
 <caption>
-Table 1. Component parameter configuration
+Table 2. Component parameter configuration
 </caption>
 <colgroup>
 <col style="width: 17%" />
@@ -315,7 +317,7 @@ Table 1. Component parameter configuration
 ## Configuration during system creation with Platform Designer tool.
 
 
-An initial time schedule can be defined when the component is integrated into the target system. This is done in the **Parameters** window of the component. An example of the Parameters window is shown in [Figure 7](#fig-ip-parameter-window).
+An initial time schedule can be defined when the component is integrated into the target system. This is done in the **Parameters** window of the component. An example of the Parameters window is shown in [Figure 12](#fig-ip-parameter-window).
 
 <!-- <div> -->
 
@@ -327,7 +329,7 @@ An initial time schedule can be defined when the component is integrated into th
 
 <figure>
   <img src="./media/configuration.png" alt="Time scheduler IP Parameters window" style="float:center">
-  <figcaption>Figure.1 Time scheduler IP Parameters window.</figcaption>
+  <figcaption>Figure 12. Time scheduler IP Parameters window.</figcaption>
 </figure> 
 
 The definitions of the parameters and the way they appear and behave in the Parameters window are specified in the `agstu_time_scheduler_sw.tcl` file. The `counter_height` and `tick_length` parameters are defined as integer values. Their definitions are similar and largely self-explanatory. As an example, the definition of `tick_length` is shown below:

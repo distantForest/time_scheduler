@@ -1,11 +1,11 @@
 # VALIDATION
 
-The validation of the Time Scheduler Component is performed on the DE10-Lite card. The test system shematic is shown in the figure 1. The test system was created with the Platform Designer tool.
+The validation of the Time Scheduler Component is performed on the DE10-Lite card. The test system shematic is shown in the figure 17. The test system was created with the Platform Designer tool.
 
   <a name="fig-1-validation">
  <figure>
   <img src="./media/test_system_schematic.png" alt="Schematic diagram" style="width:100%; float:center">
-  <figcaption>Figure 1. Test system schematic diagram.</figcaption>
+  <figcaption>Figure 17. Test system schematic diagram.</figcaption>
 </figure> 
   </a>
 
@@ -44,3 +44,7 @@ Xfunction 101c4
 The parameter `depth` indicates preemption depth.
 
 The validation approved.
+
+# REFERENCES
+
+1. Time Scheduler Component. Github repository https://github.com/distantForest/time_scheduler

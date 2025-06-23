@@ -21,7 +21,6 @@ The component is intended for integration into Nios® II-based systems via Quart
 - The priority for each period
 - The time interval for each period
 
---- ### Additional Development
 
 As part of the component, a driver has been developed to facilitate management of the component from software running on the Nios® II processor. Additionally, test programs have been created to verify both the hardware and software functionality.
 

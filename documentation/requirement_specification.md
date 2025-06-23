@@ -53,23 +53,26 @@ The purpose of this project is to create a complete component that manages the e
 **1.2 A structured standard report shall be created in MS Word document format docx.**
 - **1.2.1 The name of the report Igor_Parchakov_exjobb_B.docx**
 - **1.2.2 Max 30 pages.**
+- **Status**: Completed  
 
 
 
 ## Delivery requirements.
 
 
----
+T.B.D.
 
-## Requirements Traceability Matrix (RTM)
+<!-- --- -->
 
-| Requirement ID | Description                                                                           | Status      | Verification Method     | Test Results | PR Links |
-|----------------|---------------------------------------------------------------------------------------|-------------|-------------------------|--------------|----------|
-| 1.1            | The component shall repeatedly execute a C-function at a predetermined time interval. | Not Started | Unit Test               | Pending      | #20      |
-| 1.2            | Each C-function shall be linked to a specific time period.                            | Not Started | Functional Test         | Pending      | #21      |
-| 1.3            | Scheduler prioritizes period functions based on predefined priorities.                | Not Started | Functional Test         | Pending       | #22      |
-| 1.4.1          | Function shall complete even if it exceeds the period length.                         | Not Started | Timing Test             | Pending       | #23      |
-| 2.1            | The component shall interface with a Nios II processor via Avalon interfaces.         | Not Started | Hardware Interface Test | Pending       | #24      |
-| 2.2.1          | The number of periods the component will handle must be configurable.                 | Not Started | Configuration Test      | Pending      | #25      |
+<!-- ## Requirements Traceability Matrix (RTM) -->
 
----
+<!-- | Requirement ID | Description                                                                           | Status      | Verification Method     | Test Results | PR Links | -->
+<!-- |----------------|---------------------------------------------------------------------------------------|-------------|-------------------------|--------------|----------| -->
+<!-- | 1.1            | The component shall repeatedly execute a C-function at a predetermined time interval. | Not Started | Unit Test               | Pending      | #20      | -->
+<!-- | 1.2            | Each C-function shall be linked to a specific time period.                            | Not Started | Functional Test         | Pending      | #21      | -->
+<!-- | 1.3            | Scheduler prioritizes period functions based on predefined priorities.                | Not Started | Functional Test         | Pending       | #22      | -->
+<!-- | 1.4.1          | Function shall complete even if it exceeds the period length.                         | Not Started | Timing Test             | Pending       | #23      | -->
+<!-- | 2.1            | The component shall interface with a Nios II processor via Avalon interfaces.         | Not Started | Hardware Interface Test | Pending       | #24      | -->
+<!-- | 2.2.1          | The number of periods the component will handle must be configurable.                 | Not Started | Configuration Test      | Pending      | #25      | -->
+
+<!-- --- -->
