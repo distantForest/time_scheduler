@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-06-20
+-- Last update: 2025-06-21
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -48,6 +48,7 @@ package body pack_period is
 end package body pack_period;
 
 use work.pack_period.all;
+use work.counter_types.all;
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
@@ -91,7 +92,18 @@ entity period_controller is
 end entity period_controller;
 
 architecture count_ticks_rtl of period_controller is
-
+  
+  component counter_module is
+    generic (
+      counter_height : natural);
+    port (
+      tick_front    : in  std_logic;
+      reset_n       : in  std_logic;
+      clk           : in  std_logic;
+      period_length : in  counter_array(counter_height - 1 downto 0);
+      p_counter_irq : out std_logic_vector(counter_height -1 downto 0));
+  end component counter_module;
+  
   component tick_function is
     generic (
       g_timer_limit : integer);
@@ -123,8 +135,8 @@ architecture count_ticks_rtl of period_controller is
 
   type period_array is array (p_index_range) of unsigned (31 downto 0);  --integer;      
   type integer_array is array (natural range 0 to 15) of unsigned (31 downto 0);  --integer;
-  signal period_counters : period_array;
-  signal period_length   : period_array;
+  -- signal period_counters : period_array;
+  signal period_length   : counter_array(counter_height - 1 downto 0);
   signal period_index    : p_index_range;
   signal p_vector        : p_index_range;  -- natural range 0 to counter_height - 1;
 
@@ -173,7 +185,17 @@ architecture count_ticks_rtl of period_controller is
 
 
 begin  --architecture count_ticks
-
+  
+  counter_module_1: entity work.counter_module
+    generic map (
+      counter_height => counter_height)
+    port map (
+      tick_front    => tick_front,
+      reset_n       => reset_n,
+      clk           => clk,
+      period_length => period_length,
+      p_counter_irq => p_counter_irq);
+  
   -- instance "tick_function_1"
   tick_function_1 : entity work.tick_function
     generic map (
@@ -233,99 +255,43 @@ begin  --architecture count_ticks
       p_irq_ack    <= (others => '0');
       p_irq_ack_gl <= '0';
       if write_regs = '1' then
-        -- write control status register
-        if unsigned(addr) = p_irq_cs_reg_addr then
-          p_counter_run <= din(0);
+          case unsigned(addr) is
+
+          -- write control status register
+          when p_irq_cs_reg_addr =>
+            p_counter_run <= din(0);
 
 
-        -- write irq enable register
-        elsif unsigned(addr) = p_irq_enable_reg_addr then
-          p_irq_enable_reg <= din;
+          -- write irq enable register
+          when p_irq_enable_reg_addr =>
+            p_irq_enable_reg <= din;
 
-        -- write irq acknowlege 
-        elsif unsigned(addr) = p_irq_ack_reg_addr then
-          check_ack :
-          for i in period_counters'range loop
-            if din(i) = '1' then
-              p_irq_ack(i) <= '1';  -- give positive pulse one clk in length
-            end if;
-          end loop check_ack;
+          -- write irq acknowlege 
+          when p_irq_ack_reg_addr =>
+            check_ack :
+            for i in period_length'range loop
+              if din(i) = '1' then
+                p_irq_ack(i) <= '1';  -- give positive pulse one clk in length
+              end if;
+            end loop check_ack;
 
-        -- write global acknowlege
-        elsif unsigned(addr) = p_irq_vector_reg_addr then
-          p_irq_ack_gl     <= '1';
-          p_irq_vector_reg <= din;
+          -- write global acknowlege
+          when p_irq_vector_reg_addr =>
+            p_irq_ack_gl     <= '1';
+            p_irq_vector_reg <= din;
 
-        else
+          when others =>
           -- write period limits
-          if (unsigned(addr) >= p_limits_addr) and (unsigned(addr) < (p_limits_addr + counter_height)) then
+          if (unsigned(addr) > p_limits_addr) and (unsigned(addr) < (p_limits_addr + counter_height)) then
             if p_counter_run = '0' then
               period_length(to_integer(unsigned(addr)) - to_integer(p_limits_addr)) <= unsigned(din);
             end if;
           end if;
-        end if;
-        --   case unsigned(addr) is
-
-      --     -- write control status register
-      --     when p_irq_cs_reg_addr =>
-      --       p_counter_run <= din(0);
-
-
-      --     -- write irq enable register
-      --     when p_irq_enable_reg_addr =>
-      --       p_irq_enable_reg <= din;
-
-      --     -- write irq acknowlege 
-      --     when p_irq_ack_reg_addr =>
-      --       check_ack :
-      --       for i in period_counters'range loop
-      --         if din(i) = '1' then
-      --           p_irq_ack(i) <= '1';  -- give positive pulse one clk in length
-      --         end if;
-      --       end loop check_ack;
-
-      --     -- write global acknowlege
-      --     when p_irq_vector_reg_addr =>
-      --       p_irq_ack_gl     <= '1';
-      --       p_irq_vector_reg <= din;
-
-      --     when others =>
-      --     -- write period limits
-      --     if (unsigned(addr) > p_limits_addr) and (unsigned(addr) < (p_limits_addr + counter_height)) then
-      --       if p_counter_run = '0' then
-      --         period_length(to_integer(unsigned(addr)) - to_integer(p_limits_addr)) <= unsigned(din);
-      --       end if;
-      --     end if;
-      --               null;
-      --   end case;
-      end if;
+          null;
+      end case;
     end if;
-  end process write_registers;
-
-  -- count ticks
-  count_ticks : process (clk, reset_n)
-
-  begin
-    if reset_n = '0' then
-      period_counters <= (others => (others => '0'));
-      p_counter_irq   <= (others => '0');
-    elsif rising_edge(clk) then
-      p_counter_irq <= (others => '0');
-      if tick_front = '1' then
-        -- update counters
-        update_counters :
-        for i in period_counters'range loop
-          if period_counters(i) = period_length(i) then  --issue irq
-            period_counters(i) <= (others => '0');
-            p_counter_irq(i)   <= '1';
-          else
-            period_counters(i) <= period_counters(i) + 1;
-          end if;
-        end loop update_counters;
-      end if;
-    end if;
-
-  end process count_ticks;
+  end if;
+end process write_registers;
 
   -- manage interrupt request
   manage_irq : process(clk, reset_n)
@@ -335,7 +301,7 @@ begin  --architecture count_ticks
       p_irq <= (others => '0');
     elsif rising_edge(clk) then
       check_irq :
-      for i in period_counters'range loop
+      for i in p_index_range loop
         if (p_irq_enable_reg(i) = '1') then
           if (p_counter_irq(i) = '1') then
             p_irq(i) <= '1';

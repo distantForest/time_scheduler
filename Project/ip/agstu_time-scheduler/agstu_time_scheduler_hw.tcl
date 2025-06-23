@@ -42,6 +42,7 @@ set_fileset_property QUARTUS_SYNTH ENABLE_FILE_OVERWRITE_MODE false
 add_fileset_file period_controller.vhd VHDL PATH ./hdl/period_controller.vhd TOP_LEVEL_FILE
 add_fileset_file tick_timer.vhd VHDL PATH ./hdl/tick_timer.vhd
 add_fileset_file irq_selector.vhd VHDL PATH ./hdl/irq_selector.vhd
+add_fileset_file per_counter.vhd VHDL PATH ./hdl/per_counter.vhd
 
 
 # 
@@ -121,6 +122,9 @@ proc log2ceil {arg} {
 }
 
 proc post_elaboration {} {
+    set_module_assignment embeddedsw.CMacro.TICK_LENGTH \
+	[get_parameter_value tick_length]
+
     set_module_assignment embeddedsw.CMacro.HEIGHT \
 	[get_parameter_value counter_height]
 

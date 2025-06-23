@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  <igor_pa@live.com>
 -- Company    : AGSTU
 -- Created    : 2025-02-07
--- Last update: 2025-02-16
+-- Last update: 2025-06-22
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -41,34 +41,41 @@ end irq_selector;
 
 architecture rtl of irq_selector is
 
-  signal vector   : natural range 0 to height - 1;
-  signal irq_sent : std_logic_vector (height - 1 downto 0);
-  signal irq_out  : std_logic := '0';
+  signal vector    : natural range 0 to height - 1;
+  signal irq_sent  : std_logic_vector (height - 1 downto 0);
+  signal irq_out   : std_logic := '0';
+  signal out_delay : natural range 0 to 7 := 0;
 
 begin
 
   selector : process (reset_n, clk)
   begin
     if reset_n = '0' then
-      vector   <= 0;
-      irq_out  <= '0';
-      irq_sent <= (others => '0');
+      vector    <= 0;
+      irq_out   <= '0';
+      irq_sent  <= (others => '0');
+      out_delay <= 0;
     elsif rising_edge(clk) then
                                         --
       if irq_out = '0' then
-        scan :                          -- the line is free
-        for i in 0 to height - 1 loop
-          if (irq_sent(i) = '1') then
-            exit;
-          elsif (irq_in_mx(i) = '1') then
-            -- sending irq
-            irq_out     <= '1';
-            vector      <= i;
-            irq_sent(i) <= '1';
-            exit;
-          end if;
-        end loop scan;
+        if out_delay /= 0 then
+          out_delay <= out_delay - 1;
+        else
+          scan :                        -- the line is free
+          for i in 0 to height - 1 loop
+            if (irq_sent(i) = '1') then
+              exit;
+            elsif (irq_in_mx(i) = '1') then
+              -- sending irq
+              irq_out     <= '1';
+              vector      <= i;
+              irq_sent(i) <= '1';
+              exit;
+            end if;
+          end loop scan;
+        end if;
       elsif ack_in = '1' then           -- line is still active
+        out_delay <= 5;                 -- keep the line free for 6 clk cycles
         irq_out <= '0';
         vector  <= 0;
       end if;

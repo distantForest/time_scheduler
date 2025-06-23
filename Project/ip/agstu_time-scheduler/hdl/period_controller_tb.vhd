@@ -52,10 +52,10 @@ architecture modelsim of period_controller_tb is
 
   -- component generics
   constant counter_height : integer := 3;
-  constant tick_length    : integer := 25000000;--25 * 1000 * 1000;
-  constant per0           : integer := 2;
+  constant tick_length    : integer := 27;--25 * 1000 * 1000;
+  constant per0           : integer := 3;
   constant per1           : integer := 7;
-  constant per2           : integer := 15;
+  constant per2           : integer := 16;
   constant per3           : integer := 279;
   constant per4           : integer := 5;
   constant per5           : integer := 6;
@@ -104,8 +104,16 @@ architecture modelsim of period_controller_tb is
   signal test_seq_operations : t_OPERATION_REQUEST;
 
   signal irq_resp_operations : t_OPERATION_REQUEST;
+  signal func_resp_operations0 : t_OPERATION_REQUEST;
+  signal func_resp_operations1 : t_OPERATION_REQUEST;
+  signal func_resp_operations2 : t_OPERATION_REQUEST;
+
   signal vector : natural range 0 to counter_height -1;
   signal irq_front:std_logic;
+
+  signal function_0, function_0r : std_logic := '0';
+  signal function_1, function_1r : std_logic := '0';
+  signal function_2, function_2r : std_logic := '0';
   
     -- Wait for a given number of clock cycles
   procedure wait_cycles(cycles : integer) is
@@ -235,7 +243,12 @@ begin  -- architecture modelsim
       din           <= (others => '0');
       vector_reg_op <= IDLE;
     else
-      wait until test_seq_operations.op_kind'event or irq_resp_operations.op_kind'event;
+      wait until test_seq_operations.op_kind'event or 
+                 irq_resp_operations.op_kind'event or
+                 func_resp_operations0'event or
+                 func_resp_operations1'event or
+                 func_resp_operations2'event 
+                  ;
       if test_seq_operations.op_kind'event then
         modelsim.bus_read(
           address      => test_seq_operations.op_address,
@@ -262,6 +275,48 @@ begin  -- architecture modelsim
           clk          => Clk, reset_n => reset_n
 , data_out             => dout, data_in => din,
           do_operation => irq_resp_operations.op_kind,
+          operation    => vector_reg_op
+          );
+      elsif func_resp_operations0.op_kind'event then
+        modelsim.bus_read(
+          address      => func_resp_operations0.op_address,
+          address_out  => addr,
+          cs_n         => cs_n,
+          read_n       => read_n,
+          write_n      => write_n,
+          data_read    => func_resp_operations0.op_data_read,
+          data_write   => func_resp_operations0.op_data_write,
+          clk          => Clk, reset_n => reset_n
+, data_out             => dout, data_in => din,
+          do_operation => func_resp_operations0.op_kind,
+          operation    => vector_reg_op
+          );
+      elsif func_resp_operations1.op_kind'event then
+        modelsim.bus_read(
+          address      => func_resp_operations1.op_address,
+          address_out  => addr,
+          cs_n         => cs_n,
+          read_n       => read_n,
+          write_n      => write_n,
+          data_read    => func_resp_operations1.op_data_read,
+          data_write   => func_resp_operations1.op_data_write,
+          clk          => Clk, reset_n => reset_n
+, data_out             => dout, data_in => din,
+          do_operation => func_resp_operations1.op_kind,
+          operation    => vector_reg_op
+          );
+      elsif func_resp_operations2.op_kind'event then
+        modelsim.bus_read(
+          address      => func_resp_operations2.op_address,
+          address_out  => addr,
+          cs_n         => cs_n,
+          read_n       => read_n,
+          write_n      => write_n,
+          data_read    => func_resp_operations2.op_data_read,
+          data_write   => func_resp_operations2.op_data_write,
+          clk          => Clk, reset_n => reset_n
+, data_out             => dout, data_in => din,
+          do_operation => func_resp_operations2.op_kind,
           operation    => vector_reg_op
           );
         null;
@@ -320,12 +375,29 @@ begin  -- architecture modelsim
       irq_resp_operations.op_kind <= IDLE;
 
     else
-      wait until clk'event and (clk = '1');
+      wait until clk = '1'; -- clk'event and (clk = '1');
 --if rising_edge(Clk) then
+         if (function_0r = '0') then 
+            if (function_0 = '1') then
+             wait until function_0r = '1';
+            end if;
+         end if;
+         function_0 <= '0';
+         if (function_1r = '0') then
+           if (function_1 = '1') then
+             wait until function_1r = '1';
+           end if;
+         end if;
+         function_1 <= '0';
+         if (function_2r = '0') then
+           if (function_2 = '1') then
+             wait until function_2r = '1';
+           end if;
+         end if;
+         function_2 <= '0';
       if (p0_irq_out = '1') then
+        irq_front <= '1';
         if (irq_front = '0') then
-          irq_front <= '1';
-
           -- serve interrupt
           wait_cycles(9);
           -- read irq vector
@@ -343,14 +415,26 @@ begin  -- architecture modelsim
           wait until vector_reg_op = IDLE;
           irq_resp_operations.op_kind               <= IDLE;
           -- do isr
-          wait_cycles(11);
-          -- acknowledge by vector
-          irq_resp_operations.op_data_write         <= (others => '0');
-          irq_resp_operations.op_data_write(vector) <= '1';
-          irq_resp_operations.op_address            <= p_irq_ack_reg_addr;
-          irq_resp_operations.op_kind               <= WRITE;
-          wait until vector_reg_op = IDLE;
-          irq_resp_operations.op_kind               <= IDLE;
+          wait_cycles(1);
+          --
+          case vector is
+            when 0 =>
+              function_0 <= '1';
+            when 1 =>
+              function_1 <= '1';
+            when 2 =>
+              function_2 <= '1';
+            when others =>
+              wait until clk = '0';
+          end case;
+          
+--          -- acknowledge by vector
+--          irq_resp_operations.op_data_write         <= (others => '0');
+--          irq_resp_operations.op_data_write(vector) <= '1';
+--          irq_resp_operations.op_address            <= p_irq_ack_reg_addr;
+--          irq_resp_operations.op_kind               <= WRITE;
+--          wait until vector_reg_op = IDLE;
+--          irq_resp_operations.op_kind               <= IDLE;
         end if;
       else
         irq_front <= '0';
@@ -359,20 +443,91 @@ begin  -- architecture modelsim
 
   end process Interrupt_Service_Proc;
 
-  --     -- write/read vector register
-  --     Write_Read_Reg : process
-  --       (reset_n, Clk)
-  --       begin
-  --         if reset_n = '0' then
-  --           cs_n <= '1';
-  --           addr <= (others => '0');
-  --           read_n <= '1';
-  --           write_n <= '1';
-  --           dout <= (others => '0');
-  --           bus_done_n <= '0';
-  --           elsif rising_edge(Clk) then
-  --             if vector_reg_op = READ then
-                
+  Period_function_0 : process
+  --   (reset_n, Clk)
+  begin
+    wait until clk = '0';
+    if reset_n = '0' then
+--
+      function_0r <= '0';
+    else
+      wait until clk'event and (clk = '1');
+--if rising_edge(Clk) then
+      if function_0 = '1' then
+        function_0r <= '1';
+        wait_cycles(1);
+        wait_cycles(30);
+         -- acknowledge by vector
+         func_resp_operations0.op_data_write         <= (others => '0');
+         func_resp_operations0.op_data_write(0) <= '1';
+         func_resp_operations0.op_address            <= p_irq_ack_reg_addr;
+         func_resp_operations0.op_kind               <= WRITE;
+         wait until vector_reg_op = IDLE;
+         func_resp_operations0.op_kind               <= IDLE;
+        function_0r <= '0';
+      end if;
+    end if;
+  end process Period_function_0;                
+
+  Period_function_1 : process
+  --   (reset_n, Clk)
+  begin
+    wait until clk = '0';
+    if reset_n = '0' then
+--      vector                      <= 0;
+--      irq_front                   <= '0';
+--      irq_resp_operations.op_kind <= IDLE;
+      function_1r <= '0';
+--
+    else
+      wait until clk'event and (clk = '1');
+--if rising_edge(Clk) then
+      if function_1 = '1' then
+        function_1r <= '1';
+        wait_cycles(1);
+        wait_cycles(30);
+         -- acknowledge by vector
+         func_resp_operations1.op_data_write         <= (others => '0');
+         func_resp_operations1.op_data_write(1) <= '1';
+         func_resp_operations1.op_address            <= p_irq_ack_reg_addr;
+         func_resp_operations1.op_kind               <= WRITE;
+         wait until vector_reg_op = IDLE;
+         func_resp_operations1.op_kind               <= IDLE;
+
+        function_1r <= '0';
+      end if;
+    end if;
+  end process Period_function_1;                
+
+  Period_function_2 : process
+  --   (reset_n, Clk)
+  begin
+    wait until clk = '0';
+    if reset_n = '0' then
+--      vector                      <= 0;
+--      irq_front                   <= '0';
+--      irq_resp_operations.op_kind <= IDLE;
+      function_2r <= '0';
+--
+    else
+      wait until clk'event and (clk = '1');
+--if rising_edge(Clk) then
+      if function_2 = '1' then
+        function_2r <= '1';
+        wait_cycles(1);
+        wait_cycles(30);
+         -- acknowledge by vector
+         func_resp_operations2.op_data_write         <= (others => '0');
+         func_resp_operations2.op_data_write(2) <= '1';
+         func_resp_operations2.op_address            <= p_irq_ack_reg_addr;
+         func_resp_operations2.op_kind               <= WRITE;
+         wait until vector_reg_op = IDLE;
+         func_resp_operations2.op_kind               <= IDLE;
+
+        function_2r <= '0';
+      end if;
+    end if;
+  end process Period_function_2;                
 
 
 end architecture modelsim;
