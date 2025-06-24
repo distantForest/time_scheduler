@@ -1,3 +1,25 @@
+-------------------------------------------------------------------------------
+-- Title      : Hardware timer IP
+-- Project    : 
+-------------------------------------------------------------------------------
+-- File       : TIMER_HW_IP.vhd
+-- Author     : Igor Parchakov  <igor@fedora>
+-- Company    : AGSTU
+-- Created    : 2025-06-24
+-- Last update: 2025-06-24
+-- Platform   : 
+-- Standard   : VHDL'93/02
+-------------------------------------------------------------------------------
+-- Description: The top level entity for timer_function. It includes
+--               Avalon bus interface
+-------------------------------------------------------------------------------
+-- Copyright (c) 2025 AGSTU
+-------------------------------------------------------------------------------
+-- Revisions  :
+-- Date        Version  Author  Description
+-- 2025-06-24  1.0.1      igor	Created
+-------------------------------------------------------------------------------
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -44,11 +66,17 @@ begin  -- architecture RTL
                          addr = "00") else
           (others => '0');
   
-  control_reg(1 downto 0) <= (others => '0') when reset_n = '0' else
-                             din(31 downto 30) when (cs_n = '0' and
-                                                     write_n = '0' and
-                                                     addr = "01" and
-                                                     rising_edge(clk)) else
-                             control_reg(1 downto 0);
+  process(clk, reset_n)
+  begin
+      if reset_n = '0' then
+        control_reg <= (others => '0');
+    elsif rising_edge(clk) then
+      if(cs_n = '0' and
+         write_n = '0' and
+         addr = "01") then
+        control_reg <= din(din'left downto (din'left - control_reg'left)); 
+      end if;
+    end if;
+  end process;
   
 end architecture RTL;
