@@ -6,7 +6,7 @@
 -- Author     : Igor Parchakov  
 -- Company    : 
 -- Created    : 2025-01-20
--- Last update: 2025-06-21
+-- Last update: 2025-06-24
 -- Platform   : 
 -- Standard   : VHDL'93/02
 -------------------------------------------------------------------------------
@@ -179,7 +179,7 @@ architecture count_ticks_rtl of period_controller is
   signal read_irq_vector_reg   : std_logic;
   signal read_period_limit_reg : std_logic;
 
-  signal write_regs : std_logic;
+  -- signal write_regs : std_logic;
   
   signal p_counter_run : std_logic := '0';
 
@@ -236,62 +236,84 @@ begin  --architecture count_ticks
     end if;
   end process front_extraction;
   
-  -- avalon bus write operations
-  write_regs <= '1' when cs_n = '0' and write_n = '0'else
-                '0';
-  write_registers : process (clk, reset_n, write_regs)
+-- Avalon bus write operations
+  write_control_status_register : process (clk, reset_n)
   begin
     if reset_n = '0' then
-      p_counter_run    <= '0';
+      p_counter_run <= '0';
+    elsif rising_edge(clk) then
+      if cs_n = '0' and write_n = '0' and
+        (unsigned(addr) = p_irq_cs_reg_addr) then
+        -- write control status register
+        p_counter_run <= din(0);
+      end if;
+    end if;
+  end process write_control_status_register;
+  
+  write_irq_enable_register : process (clk, reset_n)
+  begin
+    if reset_n = '0' then
       p_irq_enable_reg <= (others => '0');
+    elsif rising_edge(clk) then
+      if cs_n = '0' and write_n = '0' and
+        (unsigned(addr) = p_irq_enable_reg_addr) then
+        p_irq_enable_reg <= din;
+      end if;
+    end if;
+  end process write_irq_enable_register;
+
+    write_global_acnowledge : process (clk, reset_n)
+    begin
+      if reset_n = '0' then
+        p_irq_vector_reg <= (others => '0');
+        p_irq_ack_gl     <= '0';
+      elsif rising_edge(clk) then
+        p_irq_ack_gl     <= '0';
+        if cs_n = '0' and write_n = '0' and
+          (unsigned(addr) = p_irq_vector_reg_addr) then
+          -- write global acknowlege
+          p_irq_ack_gl     <= '1';
+          p_irq_vector_reg <= din;
+        end if;
+      end if;
+    end process write_global_acnowledge;
+    
+  write_irq_acnowledge : process (clk, reset_n)
+  -- write irq acknowlege
+  begin
+    if reset_n = '0' then
+      p_irq_ack <= (others => '0');
+    elsif rising_edge(clk) then
+      p_irq_ack <= (others => '0');
+      if cs_n = '0' and write_n = '0' and
+        (unsigned(addr) = p_irq_ack_reg_addr) then
+        check_ack :
+        for i in period_length'range loop
+          if din(i) = '1' then
+            p_irq_ack(i) <= '1';  -- give positive pulse one clk in length
+          end if;
+        end loop check_ack;
+      end if;
+    end if;
+  end process write_irq_acnowledge;
+
+  
+  write_period_limits : process (clk, reset_n)
+    variable bus_write : std_logic := '0';
+  begin-- write period limits
+    if reset_n = '0' then
       for i in period_length'range loop
         period_length(i) <= period_init(i);
       end loop;
-      p_irq_ack        <= (others => '0');
-      p_irq_vector_reg <= (others => '0');
-      p_irq_ack_gl     <= '0';
-
     elsif rising_edge(clk) then
-      p_irq_ack    <= (others => '0');
-      p_irq_ack_gl <= '0';
-      if write_regs = '1' then
-          case unsigned(addr) is
-
-          -- write control status register
-          when p_irq_cs_reg_addr =>
-            p_counter_run <= din(0);
-
-
-          -- write irq enable register
-          when p_irq_enable_reg_addr =>
-            p_irq_enable_reg <= din;
-
-          -- write irq acknowlege 
-          when p_irq_ack_reg_addr =>
-            check_ack :
-            for i in period_length'range loop
-              if din(i) = '1' then
-                p_irq_ack(i) <= '1';  -- give positive pulse one clk in length
-              end if;
-            end loop check_ack;
-
-          -- write global acknowlege
-          when p_irq_vector_reg_addr =>
-            p_irq_ack_gl     <= '1';
-            p_irq_vector_reg <= din;
-
-          when others =>
-          -- write period limits
-          if (unsigned(addr) > p_limits_addr) and (unsigned(addr) < (p_limits_addr + counter_height)) then
-            if p_counter_run = '0' then
-              period_length(to_integer(unsigned(addr)) - to_integer(p_limits_addr)) <= unsigned(din);
-            end if;
-          end if;
-          null;
-      end case;
+      if cs_n = '0' and write_n = '0' and
+        (unsigned(addr) > p_limits_addr) and (unsigned(addr) < (p_limits_addr + counter_height)) then
+        if p_counter_run = '0' then
+          period_length(to_integer(unsigned(addr)) - to_integer(p_limits_addr)) <= unsigned(din);
+        end if;
+      end if;
     end if;
-  end if;
-end process write_registers;
+  end process write_period_limits;
 
   -- manage interrupt request
   manage_irq : process(clk, reset_n)
