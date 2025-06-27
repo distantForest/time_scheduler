@@ -1,3 +1,24 @@
+-------------------------------------------------------------------------------
+-- Title      : timer function
+-- Project    : 
+-------------------------------------------------------------------------------
+-- File       : timer_function.vhd
+-- Author     : Igor Parchakov  <igor@fedora>
+-- Company    : AGSTU
+-- Created    : 2025-06-24
+-- Last update: 2025-06-24
+-- Platform   : 
+-- Standard   : VHDL'93/02
+-------------------------------------------------------------------------------
+-- Description: Counting system clock pulses
+-------------------------------------------------------------------------------
+-- Copyright (c) 2025 AGSTU
+-------------------------------------------------------------------------------
+-- Revisions  :
+-- Date        Version  Author  Description
+-- 2025-06-24  1.0      igor	Created
+-------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 -- use ieee.std_logic_unsigned.all;
@@ -23,12 +44,22 @@ architecture timer_top_rtl of timer_function is
 
 begin
 
-  counter <= (others => '0')  when (reset_n = '0') else
-               counter_on_clk when rising_edge(clk);
-  counter_on_clk <= counter + 1 when Control_timer = "10" else
-               counter          when Control_timer = "01" else
-               (others => '0')  when Control_timer = "00" else
-               (others => '0');
+
+  process(clk, reset_n)
+  begin
+    if reset_n = '0' then
+      counter <= (others => '0');
+    elsif rising_edge(clk) then
+      if Control_timer /= "01" then
+        if Control_timer = "10" then
+          counter <= counter + 1;
+        elsif Control_timer = "00" then
+          counter <= (others => '0');
+        end if;
+      end if;
+    end if;
+  end process;
+
   
   timer_data <= std_logic_vector(counter);
 

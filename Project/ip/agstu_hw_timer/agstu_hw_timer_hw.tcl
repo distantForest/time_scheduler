@@ -20,7 +20,7 @@ package require -exact qsys 16.1
 # 
 set_module_property DESCRIPTION "Timer counting clk periods"
 set_module_property NAME agstu_hw_timer
-set_module_property VERSION 0.0.1
+set_module_property VERSION 0.0.2
 set_module_property INTERNAL false
 set_module_property OPAQUE_ADDRESS_MAP true
 set_module_property GROUP MyGroup

@@ -7,7 +7,7 @@ The Time Scheduler component is verified by simulating its behaviour with ModelS
   * IRQ processing
   * Interaction with ISR.
 
-For the simulation tests the Time Scheduler component was generated with following target parameters shown in the table 3.
+For the simulation tests the Time Scheduler component was generated with following target parameters shown in the table 4.
 
 <!-- <caption> -->
 <!-- Table 2: Target Test Configuration Parameters for the Time Scheduler Component -->
@@ -23,7 +23,7 @@ For the simulation tests the Time Scheduler component was generated with followi
 
 <table>
 <caption>
-Table 3. Target Test Configuration Parameters for the Time Scheduler Component
+Table 4. Target Test Configuration Parameters for the Time Scheduler Component
 </caption>
 <colgroup>
 <col style="width: 56%" />
@@ -159,7 +159,7 @@ The simulation results are summarised in the following table.
 
 <table>
 <caption>
-Table 4. Test results.
+Table 5. Test results.
 </caption>
 <colgroup>
 <col style="width: 2%" />

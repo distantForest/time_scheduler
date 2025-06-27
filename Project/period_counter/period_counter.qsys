@@ -363,22 +363,22 @@
  <module
    name="agstu_hw_timer_0"
    kind="agstu_hw_timer"
-   version="0.0.1"
+   version="0.0.2"
    enabled="1" />
  <module
    name="agstu_hw_timer_1"
    kind="agstu_hw_timer"
-   version="0.0.1"
+   version="0.0.2"
    enabled="1" />
  <module
    name="agstu_hw_timer_2"
    kind="agstu_hw_timer"
-   version="0.0.1"
+   version="0.0.2"
    enabled="1" />
  <module
    name="agstu_hw_timer_3"
    kind="agstu_hw_timer"
-   version="0.0.1"
+   version="0.0.2"
    enabled="1" />
  <module name="clk_0" kind="clock_source" version="18.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
