@@ -1,8 +1,18 @@
 /*
- * time_scheduler.c
+ ------------------------------------------------------------------
+ * Company: TEIS AB
+ * Engineer: Igor Parchakov
  *
- *  Created on: 25 Feb 2025
- *      Author: Igor Parchakov
+ * Created on: june 20, 2025
+ * Design Name: AGSTU_time_scheduler
+ * Target Devices: MAX10
+ * Tool versions: Quartus v18 and Eclipse Mars.2 Release (4.5.2)
+ *
+ *
+ ------------------------------------------------------------------
+ */
+/** \file
+ * This file presents ISR for task scheduler device.
  */
 
 #include "sys/alt_stdio.h"
@@ -15,6 +25,16 @@
 
 unsigned depth = 0;
 
+/**
+ * \brief      ISR for timer scheduler device
+ *
+ * \details    the ISR reads vector from the time scheduler and calls a period function
+ *             from the priod function table, using the vector as the index for the table.
+ *
+ * \param      isr_context represents time scheduler device instance
+ *
+ * \return     void
+ */
 void alt_isr_period_0 (void* isr_context){
   general_context *base = (general_context*)isr_context;
   unsigned vector = IORD_TIME_SCHEDULER_IRQ_VECTOR_REG(base->base);
