@@ -12,9 +12,9 @@
 #include "agstu_time_scheduler_regs.h"
 #include "time_scheduler.h"
 
-__attribute__((weak)) int weak_int = 0;
 
 unsigned depth = 0;
+
 void alt_isr_period_0 (void* isr_context){
   general_context *base = (general_context*)isr_context;
   unsigned vector = IORD_TIME_SCHEDULER_IRQ_VECTOR_REG(base->base);
@@ -26,8 +26,10 @@ void alt_isr_period_0 (void* isr_context){
  __asm__ volatile ("wrctl ienable, %0" : : "r" (irq_enabled | (1 << base->irq)) : "memory");
  __asm__ volatile ("wrctl status, %0" : : "r" (1 << 0) : "memory");
 
+/*  Log for debugging
   alt_printf("function %x\n",(*(base->period_functions))[vector]);
   alt_printf("..irq vector %x, depth %x",vector, depth);
+*/
 
   // call period function by vector
   if ((*(base->period_functions))[vector]){(*base->period_functions)[vector]();}
@@ -38,22 +40,4 @@ void alt_isr_period_0 (void* isr_context){
   depth -= 1;
 }
 
-void time_scheduler_init(general_context* scheduler){
-//    TIME_SCHEDULER_CONTEXT(TIME_SCHEDULER_0, 0,0,0);
-    // Register ISR
-static int f = 1;
-    f++;
-        if (alt_ic_isr_register(
-            scheduler->irq_id,
-            scheduler->irq,
-            alt_isr_period_0,
-            scheduler,
-            0x0
-            )){
-        alt_printf("Error ISR register scheduler_%x",scheduler->irq);
-    }
-    else{
-        alt_printf("Register success, irq_id %x, irq %x, base %x\n",scheduler->irq_id, scheduler->irq, scheduler->base);
-    }
-        alt_printf("~~~~weak %x", weak_int);
-}
+

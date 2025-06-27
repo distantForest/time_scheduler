@@ -37,9 +37,9 @@
       } while (0)
 
 #define TIME_SCHEDULER_PERIOD_SET(name, period_no, period) do{	\
-    IOWR_TIME_SCHEDULER_IRQ_ENABLE_REG( \
+    IOWR_TIME_SCHEDULER_PERIOD_REG( \
     CONCATENATE(name, _BASE), \
-    (IORD_TIME_SCHEDULER_IRQ_ENABLE_REG(CONCATENATE(name, _BASE)) | (1 << period))); \
+    period_no, (period - 1)); \
       } while (0)
 
 typedef void (*period_function_ptr)(void);
@@ -66,11 +66,6 @@ typedef struct  {
                                         .irq_id = name##_IRQ_INTERRUPT_CONTROLLER_ID, \
                                         .functions = {__VA_ARGS__}};
 
-/* #define TIME_SCHEDULER_INIT(name1, name2) \ */
-/*   { \ */
-/*     const char a[] = " this is n_a_m_e_1 name1##,"; \ */
-/*     const char b[] = " this is n-a-m-e-2 name2##."; \ */
-/*    }; */
 
 #define TIME_SCHEDULER_INSTANCE(name, class) \
     struct name##_context {             \
@@ -104,7 +99,6 @@ typedef struct  {
 	       name##_i.irq_id, name##_i.irq, name##_i.base);	\
   }};
 
-void time_scheduler_init(general_context* scheduler);
 void alt_isr_period_0 (void* isr_context);
 
 #endif /* INC_TIME_SCHEDULER_H_ */
