@@ -122,20 +122,21 @@ typedef struct  {
  * This macro registers an ISR for specific time scheduler device
  */
 #define TIME_SCHEDULER_INIT(name, class) \
-  do {					 \
-  if (alt_ic_isr_register(		 \
-					 name##_i.irq_id,	\
-					 name##_i.irq,	\
-					 alt_isr_period_0,	\
-					 &name##_i,		\
-					 0x0			\
-					 )){			      \
-    alt_printf("Error ISR register scheduler_%x",name##_i.irq);     \
-  }								      \
-  else{									\
-    alt_printf("Register success, irq_id %x, irq %x, base %x\n",	\
-	       name##_i.irq_id, name##_i.irq, name##_i.base);	\
-  }} while (0)
+        do {                  \
+            if (alt_ic_isr_register(\
+                            name##_i.irq_id,\
+                            name##_i.irq,\
+                            alt_isr_period_0,\
+                            &name##_i,\
+                            0x0\
+                    )) {                 \
+                alt_printf("Error ISR register scheduler_%x",name##_i.irq);\
+            }                                  \
+            else {                                \
+                alt_printf("Register success, irq_id %x, irq %x, base %x\n",\
+                        name##_i.irq_id, name##_i.irq, name##_i.base);\
+            } \
+        }while (0)
 
 // prototype for ISR
 void alt_isr_period_0 (void* isr_context);

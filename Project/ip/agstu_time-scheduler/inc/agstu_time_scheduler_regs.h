@@ -26,11 +26,11 @@
  * theese macros define address offsets for the registers that
  * a time scheduler device contains.
  */
-#define TIME_SCHEDULER_IRQ_ENABLE_REG (0x0)
-#define TIME_SCHEDULER_IRQ_ACK_REG (0x4)
-#define TIME_SCHEDULER_IRQ_VECTOR_REG (0x8)
-#define TIME_SCHEDULER_CS_REG (12)
-#define TIME_SCHEDULER_PERIOD_REG (TIME_SCHEDULER_CS_REG + 4)
+#define TIME_SCHEDULER_IRQ_ENABLE_REG (0x00)
+#define TIME_SCHEDULER_IRQ_ACK_REG (0x04)
+#define TIME_SCHEDULER_IRQ_VECTOR_REG (0x08)
+#define TIME_SCHEDULER_CS_REG (0x0c)
+#define TIME_SCHEDULER_PERIOD_REG (0x10)
 
 #define CONCATENATE(A,B) A##B
 
